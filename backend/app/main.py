@@ -1,18 +1,25 @@
 from fastapi import FastAPI
 from .routers import users, matches, predictions
 from .database.connection import Base, engine
+from .scheduler import start_scheduler
 from .models.user import User
 from .models.match import Match
 from .models.prediction import Prediction
 
-app = FastAPI()
+from contextlib import asynccontextmanager
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    start_scheduler()
+    yield
+
+app = FastAPI(lifespan=lifespan)
 
 Base.metadata.create_all(bind=engine)
 
 app.include_router(users.router)
 app.include_router(matches.router)
 app.include_router(predictions.router)
-
 
 @app.get("/")
 def read_root():

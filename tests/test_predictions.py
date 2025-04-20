@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import AsyncMock, patch
-
+from datetime import date, datetime
 
 pytestmark = pytest.mark.asyncio
 
@@ -8,7 +8,7 @@ pytestmark = pytest.mark.asyncio
 @pytest.fixture
 def setup_data(db_session):
     client = db_session
-   
+
     client.post(
         "/users/",
         json={
@@ -25,8 +25,11 @@ def setup_data(db_session):
     )
     token = response.json()["access_token"]
 
+    today = date.today()
+    date_str = today.strftime("%Y-%m-%d")
+
     with patch(
-        "backend.app.services.match_service.MatchService.fetch_matches",
+        "backend.app.services.match_service.MatchService.fetch_today_matches",
         new_callable=AsyncMock,
     ) as mock:
         mock.return_value = [
@@ -36,26 +39,28 @@ def setup_data(db_session):
                 "league": "Campeonato Brasileiro",
                 "team_home": "Corinthians",
                 "team_visitor": "Palmeiras",
-                "match_date": "2025-04-19 16:00",
+                "match_date": datetime.strptime(f"{date_str} 16:00", "%Y-%m-%d %H:%M"),
                 "start_time": "HOJE 16:00",
             }
         ]
-        client.get("/matches/fetch-today")
 
-    return token
+        response = client.get("/matches/fetch-today")
+        match_id = response.json()[0]["id"]
+
+    return token, match_id
 
 
 async def test_create_prediction(db_session, setup_data):
     client = db_session
-    token = setup_data
+    token, match_id = setup_data
     response = client.post(
         "/predictions/",
-        json={"match_id": 1, "home_team_score": 2, "away_team_score": 1},
+        json={"match_id": match_id, "home_team_score": 2, "away_team_score": 1},
         headers={"Authorization": f"Bearer {token}"},
     )
     assert response.status_code == 200
     prediction = response.json()
-    assert prediction["match_id"] == 1
+    assert prediction["match_id"] == match_id
     assert prediction["home_team_score"] == 2
     assert prediction["away_team_score"] == 1
     assert prediction["user_id"] == 1
@@ -63,30 +68,32 @@ async def test_create_prediction(db_session, setup_data):
 
 async def test_create_duplicate_prediction(db_session, setup_data):
     client = db_session
-    token = setup_data
+    token, match_id = setup_data
 
     client.post(
         "/predictions/",
-        json={"match_id": 1, "home_team_score": 2, "away_team_score": 1},
+        json={"match_id": match_id, "home_team_score": 2, "away_team_score": 1},
         headers={"Authorization": f"Bearer {token}"},
     )
 
     response = client.post(
         "/predictions/",
-        json={"match_id": 1, "home_team_score": 3, "away_team_score": 0},
+        json={"match_id": match_id, "home_team_score": 3, "away_team_score": 0},
         headers={"Authorization": f"Bearer {token}"},
     )
     assert response.status_code == 400
-    assert response.json() == {"detail": "Usuario já fez palpite para essa partida"}
+    assert response.json() == {
+        "detail": "Usuario já fez palpite para essa partida"
+    }
 
 
 async def test_get_user_predictions(db_session, setup_data):
     client = db_session
-    token = setup_data
+    token, match_id = setup_data
 
     client.post(
         "/predictions/",
-        json={"match_id": 1, "home_team_score": 2, "away_team_score": 1},
+        json={"match_id": match_id, "home_team_score": 2, "away_team_score": 1},
         headers={"Authorization": f"Bearer {token}"},
     )
 
@@ -96,6 +103,6 @@ async def test_get_user_predictions(db_session, setup_data):
     assert response.status_code == 200
     predictions = response.json()
     assert len(predictions) == 1
-    assert predictions[0]["match_id"] == 1
+    assert predictions[0]["match_id"] == match_id
     assert predictions[0]["home_team_score"] == 2
     assert predictions[0]["away_team_score"] == 1

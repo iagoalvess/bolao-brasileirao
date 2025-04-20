@@ -11,6 +11,7 @@ class Prediction(Base):
     match_id = Column(Integer, ForeignKey("matches.id"), nullable=False)
     home_team_score = Column(Integer, nullable=False)
     away_team_score = Column(Integer, nullable=False)
+    points = Column(Integer, default=0, nullable=False)
 
     user = relationship("User", back_populates="predictions")
     match = relationship("Match", back_populates="predictions")

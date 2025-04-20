@@ -1,3 +1,4 @@
+import json
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.orm import relationship
 from ..database.connection import Base
@@ -13,7 +14,22 @@ class Match(Base):
     away_team = Column(String(100), nullable=False)
     status = Column(String(50), nullable=False)
 
+    _scoreboard = Column("scoreboard", String(500), nullable=True)
+
     predictions = relationship("Prediction", back_populates="match")
+
+    @property
+    def scoreboard(self) -> dict:
+        if self._scoreboard:
+            try:
+                return json.loads(self._scoreboard)
+            except json.JSONDecodeError:
+                return {}
+        return {}
+
+    @scoreboard.setter
+    def scoreboard(self, value: dict):
+        self._scoreboard = json.dumps(value)
 
     @staticmethod
     def generate_match_id(match_date: str, home_team: str, away_team: str) -> str:

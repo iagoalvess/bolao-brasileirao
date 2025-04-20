@@ -9,5 +9,6 @@ class User(Base):
     username = Column(String(50), unique=True, index=True, nullable=False)
     email = Column(String(100), unique=True, nullable=False)
     password = Column(String(255), nullable=False)
+    total_points = Column(Integer, default=0, nullable=False)
     
     predictions = relationship("Prediction", back_populates="user")
