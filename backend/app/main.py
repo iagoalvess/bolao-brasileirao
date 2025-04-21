@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from .routers import users, matches, predictions
 from .database.connection import Base, engine
 from .scheduler import start_scheduler
@@ -14,6 +15,14 @@ async def lifespan(app: FastAPI):
     yield
 
 app = FastAPI(lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Em produção, especifique os domínios permitidos
+    allow_credentials=True,
+    allow_methods=["*"],  # Permite todos os métodos
+    allow_headers=["*"],
+)
 
 Base.metadata.create_all(bind=engine)
 

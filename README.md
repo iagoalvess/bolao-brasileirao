@@ -14,5 +14,9 @@ pip install -r requirements.txt
 # Rode a API
 uvicorn app.main:app --reload
 
+# Rode o Frontend
+npm i
+npm run dev
+
 # Documentação por enquanto local em
 http://localhost:8000/docs#/

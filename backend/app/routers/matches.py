@@ -103,3 +103,13 @@ async def get_yesterday_matches(db: Session = Depends(get_db)):
     if not matches:
         raise HTTPException(status_code=404, detail="Nenhuma partida encontrada ontem")
     return matches
+
+
+@router.get("/", response_model=List[MatchResponse])
+async def get_all_matches(db: Session = Depends(get_db)):
+    matches = db.query(Match).all()
+    if not matches:
+        raise HTTPException(
+            status_code=404, detail="Nenhuma partida encontrada no banco de dados"
+        )
+    return matches
