@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { matchService, Match } from "@/services/matchService";
 import { predictionService, Prediction } from "@/services/predictionService";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import PageHeader from "@/components/PageHeader";
 import {
   Table,
   TableBody,
@@ -15,22 +16,7 @@ import {
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-
-function calcularPontuacao(
-  resultado: { home: number; away: number },
-  palpite: { home: number; away: number }
-) {
-  if (resultado.home === palpite.home && resultado.away === palpite.away)
-    return 10;
-  if (resultado.home - resultado.away === palpite.home - palpite.away) return 5;
-  if (
-    (resultado.home > resultado.away && palpite.home > palpite.away) ||
-    (resultado.home < resultado.away && palpite.home < palpite.away) ||
-    (resultado.home === resultado.away && palpite.home === palpite.away)
-  )
-    return 3;
-  return 0;
-}
+import { calcularPontuacao } from "@/lib/utils";
 
 const Historico = () => {
   const { user } = useAuth();
@@ -64,20 +50,11 @@ const Historico = () => {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gradient-to-b from-soccer-field to-soccer-green p-4">
-        <div className="container mx-auto max-w-4xl">
-          <Card className="shadow-lg border-2 border-soccer-yellow mb-8">
-            <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <CardTitle className="text-2xl">Histórico de Partidas</CardTitle>
-              <Button
-                variant="default"
-                className="sm:items-right border-soccer-yellow hover:bg-soccer-green hover:text-yellow-400"
-                onClick={() => navigate("/home")}
-              >
-                Voltar
-              </Button>
-            </CardHeader>
-            <CardContent>
+      <div className="min-h-screen bg-gradient-to-br from-soccer-field via-soccer-green to-soccer-yellow p-6">
+        <div className="max-w-6xl mx-auto">
+          <PageHeader showBackButton onBackClick={() => navigate("/home")} />
+          <Card className="shadow-2xl border-2 border-soccer-yellow bg-white/95 rounded-xl mt-6">
+            <CardContent className="p-6">
               {isLoading ? (
                 <div className="text-center py-6">Carregando histórico...</div>
               ) : error ? (
@@ -88,13 +65,15 @@ const Historico = () => {
               ) : matches && matches.length > 0 ? (
                 <Table>
                   <TableHeader>
-                    <TableRow>
-                      <TableHead>Data</TableHead>
-                      <TableHead>Casa</TableHead>
-                      <TableHead>Fora</TableHead>
-                      <TableHead>Resultado</TableHead>
-                      <TableHead>Seu palpite</TableHead>
-                      <TableHead>Pontuação</TableHead>
+                    <TableRow className="bg-soccer-yellow text-white">
+                      <TableHead className="text-white">Data</TableHead>
+                      <TableHead className="text-white">Casa</TableHead>
+                      <TableHead className="text-white">Fora</TableHead>
+                      <TableHead className="text-white">Resultado</TableHead>
+                      <TableHead className="text-white">Seu palpite</TableHead>
+                      <TableHead className="text-white text-center">
+                        Pontuação
+                      </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -107,18 +86,51 @@ const Historico = () => {
                       .map((match: Match) => {
                         const palpite = predictionsMap[match.id];
                         const resultadoFinalizado = match.status === "FINISHED";
+
+                        const pontuacao =
+                          palpite && resultadoFinalizado && match.scoreboard
+                            ? calcularPontuacao(
+                                {
+                                  home: match.scoreboard.home,
+                                  away: match.scoreboard.visitor,
+                                },
+                                {
+                                  home: palpite.home_team_score,
+                                  away: palpite.away_team_score,
+                                }
+                              )
+                            : null;
+
+                        const getBadge = (pts: number | null) => {
+                          if (pts === 10) return "bg-green-500 text-white";
+                          if (pts === 5) return "bg-yellow-500 text-black";
+                          if (pts === 3) return "bg-orange-400 text-white";
+                          if (pts === 0) return "bg-red-400 text-white";
+                          return "bg-gray-300 text-black";
+                        };
+
                         return (
-                          <TableRow key={match.id}>
+                          <TableRow
+                            key={match.id}
+                            className="odd:bg-muted/40 transition-colors hover:bg-muted"
+                          >
                             <TableCell>
                               {new Date(match.match_date).toLocaleDateString(
                                 "pt-BR"
                               )}
                             </TableCell>
-                            <TableCell>{match.home_team}</TableCell>
-                            <TableCell>{match.away_team}</TableCell>
+                            <TableCell className="font-semibold">
+                              {match.home_team}
+                            </TableCell>
+                            <TableCell className="font-semibold">
+                              {match.away_team}
+                            </TableCell>
                             <TableCell>
                               {resultadoFinalizado && match.scoreboard ? (
-                                `${match.home_team} ${match.scoreboard.home} x ${match.scoreboard.visitor} ${match.away_team}`
+                                <span className="text-sm font-medium">
+                                  {match.scoreboard.home} x{" "}
+                                  {match.scoreboard.visitor}
+                                </span>
                               ) : (
                                 <span className="text-xs text-gray-500">
                                   Não finalizado
@@ -127,28 +139,30 @@ const Historico = () => {
                             </TableCell>
                             <TableCell>
                               {palpite ? (
-                                `${palpite.home_team_score} x ${palpite.away_team_score}`
+                                <span className="text-sm">
+                                  {palpite.home_team_score} x{" "}
+                                  {palpite.away_team_score}
+                                </span>
                               ) : (
                                 <span className="text-xs text-gray-500">
                                   Nenhum
                                 </span>
                               )}
                             </TableCell>
-                            <TableCell>
-                              {palpite &&
-                              resultadoFinalizado &&
-                              match.scoreboard
-                                ? calcularPontuacao(
-                                    {
-                                      home: match.scoreboard.home,
-                                      away: match.scoreboard.visitor,
-                                    },
-                                    {
-                                      home: palpite.home_team_score,
-                                      away: palpite.away_team_score,
-                                    }
-                                  )
-                                : "--"}
+                            <TableCell className="text-center">
+                              {pontuacao !== null ? (
+                                <span
+                                  className={`px-2 py-1 rounded-full text-xs font-bold ${getBadge(
+                                    pontuacao
+                                  )}`}
+                                >
+                                  {pontuacao} pts
+                                </span>
+                              ) : (
+                                <span className="text-xs text-gray-500">
+                                  --
+                                </span>
+                              )}
                             </TableCell>
                           </TableRow>
                         );

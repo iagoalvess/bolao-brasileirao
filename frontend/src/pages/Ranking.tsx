@@ -1,6 +1,5 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { matchService } from "@/services/matchService";
 import { authService, User } from "@/services/userService";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -14,6 +13,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import PageHeader from "@/components/PageHeader";
 
 const Ranking = () => {
   const navigate = useNavigate();
@@ -30,7 +30,6 @@ const Ranking = () => {
 
   const ranking = React.useMemo(() => {
     if (!users) return [];
-
     return users
       .map((user: User) => ({
         id: user.id,
@@ -42,42 +41,55 @@ const Ranking = () => {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gradient-to-b from-soccer-field to-soccer-green p-4">
-        <div className="container mx-auto max-w-2xl">
-          <Card className="shadow-lg border-2 border-soccer-yellow mb-8">
-            <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <CardTitle className="text-2xl">Ranking de Pontuadores</CardTitle>
-              <Button
-                variant="default"
-                className="sm:items-right border-soccer-yellow hover:bg-soccer-green hover:text-yellow-400"
-                onClick={() => navigate("/home")}
-              >
-                Voltar
-              </Button>
+      <div className="min-h-screen bg-gradient-to-br from-soccer-field via-soccer-green to-soccer-yellow p-6">
+        <div className="max-w-6xl mx-auto">
+          <PageHeader showBackButton onBackClick={() => navigate("/home")} />
+          <Card className="shadow-2xl border-2 border-soccer-yellow bg-white/95 rounded-xl">
+            <CardHeader>
+              <CardTitle className="text-3xl font-semibold text-soccer-black drop-shadow-sm">
+                Ranking de Pontuadores
+              </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="overflow-x-auto">
               {loadingUsers ? (
-                <div className="text-center py-6">Carregando ranking...</div>
+                <div className="text-center py-8 text-lg text-gray-600">
+                  Carregando ranking...
+                </div>
               ) : errorUsers ? (
-                <div className="text-center text-red-600 py-6">
+                <div className="text-center text-red-600 py-8 text-lg">
                   {(errorUsers as any)?.response?.data?.detail ||
                     "Erro ao carregar dados."}
                 </div>
               ) : (
-                <Table>
+                <Table className="min-w-full bg-white rounded-lg shadow-inner text-gray-800">
                   <TableHeader>
-                    <TableRow>
-                      <TableHead>Posição</TableHead>
-                      <TableHead>Usuário</TableHead>
-                      <TableHead>Pontos</TableHead>
+                    <TableRow className="bg-soccer-yellow">
+                      <TableHead className="px-4 py-3 text-white">
+                        Posição
+                      </TableHead>
+                      <TableHead className="px-4 py-3 text-white">
+                        Usuário
+                      </TableHead>
+                      <TableHead className="px-4 py-3 text-white">
+                        Pontos
+                      </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {ranking.map((user, idx) => (
-                      <TableRow key={user.id}>
-                        <TableCell className="font-bold">{idx + 1}º</TableCell>
-                        <TableCell>{user.username}</TableCell>
-                        <TableCell>{user.pontos}</TableCell>
+                      <TableRow
+                        key={user.id}
+                        className="hover:bg-soccer-green/10"
+                      >
+                        <TableCell className="px-4 py-3 font-bold">
+                          {idx + 1}º
+                        </TableCell>
+                        <TableCell className="px-4 py-3">
+                          {user.username}
+                        </TableCell>
+                        <TableCell className="px-4 py-3">
+                          {user.pontos}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

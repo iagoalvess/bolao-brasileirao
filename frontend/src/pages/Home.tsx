@@ -1,55 +1,81 @@
-import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import PageHeader from "@/components/PageHeader";
 import { Link } from "react-router-dom";
+import {
+  NavigationMenu,
+  NavigationMenuList,
+  NavigationMenuItem,
+  NavigationMenuLink,
+} from "@/components/ui/navigation-menu";
+import { List, LayoutList, LayoutGrid, LogOut } from "lucide-react";
 
-const Home = () => {
-  const { user, signOut } = useAuth();
+const HomePageNavigation = () => (
+  <div className="flex justify-center my-10">
+    <NavigationMenu>
+      <NavigationMenuList className="bg-white/95 rounded-xl shadow-2xl px-6 py-4 space-x-4">
+        <NavigationMenuItem>
+          <Link to="/matches">
+            <NavigationMenuLink className="flex items-center gap-3 p-4 rounded-lg hover:bg-soccer-yellow hover:text-soccer-black transition-all duration-200 font-semibold text-soccer-black bg-white shadow-sm hover:shadow-md">
+              <LayoutGrid
+                size={20}
+                className="text-soccer-yellow group-hover:text-soccer-black transition"
+              />
+              Partidas do dia
+            </NavigationMenuLink>
+          </Link>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <Link to="/historico">
+            <NavigationMenuLink className="flex items-center gap-3 p-4 rounded-lg hover:bg-soccer-yellow hover:text-soccer-black transition-all duration-200 font-semibold text-soccer-black bg-white shadow-sm hover:shadow-md">
+              <List
+                size={20}
+                className="text-soccer-yellow group-hover:text-soccer-black transition"
+              />
+              Histórico de partidas
+            </NavigationMenuLink>
+          </Link>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <Link to="/ranking">
+            <NavigationMenuLink className="flex items-center gap-3 p-4 rounded-lg hover:bg-soccer-yellow hover:text-soccer-black transition-all duration-200 font-semibold text-soccer-black bg-white shadow-sm hover:shadow-md">
+              <LayoutList
+                size={20}
+                className="text-soccer-yellow group-hover:text-soccer-black transition"
+              />
+              Ranking de jogadores
+            </NavigationMenuLink>
+          </Link>
+        </NavigationMenuItem>
+      </NavigationMenuList>
+    </NavigationMenu>
+  </div>
+);
+
+const HomePage = () => {
+  const { signOut } = useAuth();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-soccer-field to-soccer-green p-4">
-      <div className="container mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-white">Bolão de Futebol</h1>
-          <div className="flex items-center gap-4">
-            <span className="text-white font-medium">
-              Olá, {user?.username}
-            </span>
-            <Button 
-              onClick={signOut}
-              variant="outline"
-              className="bg-white hover:bg-gray-100"
-            >
-              Sair
-            </Button>
-          </div>
-        </div>
-        <div className="mb-8 flex justify-center gap-1">
-          <Link to="/matches">
-            <Button className="bg-soccer-yellow text-soccer-black font-bold hover:bg-yellow-200 transition-colors">
-              Partidas do dia
-            </Button>
-          </Link>
-          <Link to="/historico">
-            <Button className="bg-soccer-yellow text-soccer-black font-bold hover:bg-yellow-200 transition-colors">
-              Histórico de partidas
-            </Button>
-          </Link>
-          <Link to="/ranking">
-            <Button className="bg-soccer-yellow text-soccer-black font-bold hover:bg-yellow-200 transition-colors">
-              Ranking de jogadores
-            </Button>
-          </Link>
-        </div>
-        <Card className="shadow-lg border-2 border-soccer-yellow">
+    <div className="min-h-screen bg-gradient-to-br from-soccer-field via-soccer-green to-soccer-yellow p-6">
+      <div className="max-w-6xl mx-auto">
+        <PageHeader />
+        <HomePageNavigation />
+        <Card className="shadow-2xl border-2 border-soccer-yellow bg-white/95 rounded-xl">
           <CardHeader>
-            <CardTitle className="text-2xl">Bem-vindo ao Bolão!</CardTitle>
+            <CardTitle className="text-3xl font-semibold text-soccer-black">
+              Bem-vindo ao Bolão!
+            </CardTitle>
           </CardHeader>
-          <CardContent>
-            <p>Sistema desenvolvido durante a disciplina de Engenharia de Software II</p>
-          </CardContent>
-          <CardContent>
-            <p>O bolão do futebol busca permitir que amantes do futebol se reunam para palpitar no Brasileirão</p>
+          <CardContent className="space-y-4 text-lg text-gray-800">
+            <p>
+              Sistema desenvolvido durante a disciplina de Engenharia de
+              Software II.
+            </p>
+            <p>
+              O bolão do futebol busca permitir que amantes do futebol se reúnam
+              para palpitar no Brasileirão.
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -57,4 +83,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomePage;
