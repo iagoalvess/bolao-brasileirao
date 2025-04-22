@@ -59,7 +59,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       localStorage.setItem('@bolao:user', JSON.stringify(userData));
       
       setUser(userData);
-      navigate('/dashboard');
+      navigate('/home');
     } catch (error) {
       console.error("Erro ao fazer login:", error);
       throw error;

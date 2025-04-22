@@ -13,6 +13,13 @@ export interface Match {
   } | null;
 }
 
+export interface User {
+  id: number;
+  username: string;
+  email: string;
+  total_points: number;
+}
+
 export interface UserPrediction {
   match_id: number;
   home_team_score: number;
@@ -49,5 +56,13 @@ export const matchService = {
   getAllMatches: async () => {
     const res = await api.get("/matches/");
     return res.data as Match[];
+  },
+  getAllPredictions: async () => {
+    const res = await api.get("/predictions/");
+    return res.data as Prediction[];
+  },
+  getAllUsers: async () => {
+    const res = await api.get("/users/");
+    return res.data as User[];
   }
 };

@@ -66,3 +66,13 @@ async def get_user_predictions(
             status_code=404, detail="Nenhum palpite encontrado para o usuário"
         )
     return predictions
+
+
+@router.get("/", response_model=List[PredictionResponse])
+async def get_all_predictions(db: Session = Depends(get_db)):
+    predictions = db.query(Prediction).all()
+    if not predictions:
+        raise HTTPException(
+            status_code=404, detail="Nenhum palpite encontrado no banco de dados"
+        )
+    return predictions

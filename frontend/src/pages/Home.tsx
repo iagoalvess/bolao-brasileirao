@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Link } from "react-router-dom";
 
-const Dashboard = () => {
+const Home = () => {
   const { user, signOut } = useAuth();
 
   return (
@@ -24,10 +24,20 @@ const Dashboard = () => {
             </Button>
           </div>
         </div>
-        <div className="mb-8 flex justify-center">
+        <div className="mb-8 flex justify-center gap-1">
           <Link to="/matches">
             <Button className="bg-soccer-yellow text-soccer-black font-bold hover:bg-yellow-200 transition-colors">
-              Ver partidas de hoje
+              Partidas do dia
+            </Button>
+          </Link>
+          <Link to="/historico">
+            <Button className="bg-soccer-yellow text-soccer-black font-bold hover:bg-yellow-200 transition-colors">
+              Histórico de partidas
+            </Button>
+          </Link>
+          <Link to="/ranking">
+            <Button className="bg-soccer-yellow text-soccer-black font-bold hover:bg-yellow-200 transition-colors">
+              Ranking de jogadores
             </Button>
           </Link>
         </div>
@@ -36,7 +46,10 @@ const Dashboard = () => {
             <CardTitle className="text-2xl">Bem-vindo ao Bolão!</CardTitle>
           </CardHeader>
           <CardContent>
-            <p>Painel em construção. Logo você poderá participar de bolões e fazer seus palpites!</p>
+            <p>Sistema desenvolvido durante a disciplina de Engenharia de Software II</p>
+          </CardContent>
+          <CardContent>
+            <p>O bolão do futebol busca permitir que amantes do futebol se reunam para palpitar no Brasileirão</p>
           </CardContent>
         </Card>
       </div>
@@ -44,4 +57,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Home;

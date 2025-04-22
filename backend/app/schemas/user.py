@@ -7,7 +7,9 @@ class UserCreate(BaseModel):
 
 
 class UserResponse(BaseModel):
+    id: int
     username: str
     email: str
+    total_points: int
 
     model_config = ConfigDict(from_attributes=True)
