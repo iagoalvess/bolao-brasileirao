@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { matchService, Match, Prediction } from "@/services/matchService";
+import { matchService, Match } from "@/services/matchService";
+import { predictionService, Prediction, PredictionPayload } from "@/services/predictionService";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,7 +31,7 @@ const Matches = () => {
   // Busca os palpites do usuário logado
   const { data: myPredictions } = useQuery({
     queryKey: ["my-predictions"],
-    queryFn: matchService.getMyPredictions,
+    queryFn: predictionService.getMyPredictions,
     retry: false,
   });
 
@@ -57,7 +58,7 @@ const Matches = () => {
   }, [myPredictions]);
 
   const mutation = useMutation({
-    mutationFn: matchService.createPrediction,
+    mutationFn: predictionService.createPrediction,
     onSuccess: () => {
       toast({
         title: "Palpite enviado!",

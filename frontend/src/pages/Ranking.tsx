@@ -1,6 +1,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { matchService } from "@/services/matchService";
+import { authService, User } from "@/services/userService";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,7 +24,7 @@ const Ranking = () => {
     error: errorUsers,
   } = useQuery({
     queryKey: ["all-users"],
-    queryFn: matchService.getAllUsers,
+    queryFn: authService.getUsers,
     retry: false,
   });
 
@@ -31,7 +32,7 @@ const Ranking = () => {
     if (!users) return [];
 
     return users
-      .map((user) => ({
+      .map((user: User) => ({
         id: user.id,
         username: user.username,
         pontos: user.total_points,

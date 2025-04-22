@@ -1,6 +1,5 @@
-
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { authService } from '@/services/api';
+import { authService } from '@/services/userService';
 import { useNavigate } from 'react-router-dom';
 
 interface User {
@@ -47,12 +46,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
       
       const { access_token } = response;
       
-      // Idealmente, você buscaria as informações completas do usuário aqui
-      // Como estamos simplificando, vamos criar um usuário básico
       const userData = {
-        id: 'user-id', // Na implementação real, você teria o ID do usuário
+        id: 'user-id',
         username,
-        email: '', // Na implementação real, você teria o email do usuário
+        email: '',
       };
       
       localStorage.setItem('@bolao:token', access_token);
@@ -72,7 +69,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       setLoading(true);
       await authService.register(username, email, password);
-      // Após o registro, redirecionar para login
       navigate('/login');
     } catch (error) {
       console.error("Erro ao criar conta:", error);

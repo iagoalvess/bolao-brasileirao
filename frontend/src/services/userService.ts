@@ -1,6 +1,14 @@
+
 import axios from 'axios';
 
 const BASE_URL = 'http://localhost:8000';
+
+export interface User {
+  id: number;
+  username: string;
+  email: string;
+  total_points: number;
+}
 
 export const api = axios.create({
   baseURL: BASE_URL,
@@ -42,6 +50,6 @@ export const authService = {
 
   getUsers: async () => {
     const response = await api.get('/users/');
-    return response.data;
+    return response.data as User[];
   },
 };
