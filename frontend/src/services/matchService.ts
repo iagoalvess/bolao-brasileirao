@@ -1,5 +1,4 @@
-
-import { api } from "./userService";
+import { api } from "./apiService";
 
 export interface Match {
   id: number;

@@ -1,4 +1,4 @@
-import { api } from "./userService";
+import { api } from "./apiService";
 
 export interface PredictionPayload {
  match_id: number;

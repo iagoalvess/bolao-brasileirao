@@ -7,7 +7,7 @@ from typing import List
 from ..database.connection import get_db
 from ..models.user import User
 from ..schemas.user import UserCreate, UserResponse
-from ..utils.auth import get_password_hash, verify_password, create_access_token
+from ..services.auth_service import get_password_hash, verify_password, create_access_token
 
 router = APIRouter(prefix="/users", tags=["users"])
 

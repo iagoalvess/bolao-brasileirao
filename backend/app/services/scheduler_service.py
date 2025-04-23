@@ -4,8 +4,8 @@ from sqlalchemy.orm import Session
 from datetime import datetime
 import pytz
 
-from .database.connection import SessionLocal
-from .routers.matches import fetch_today_matches, fetch_yesterday_results
+from ..database.connection import SessionLocal
+from ..routers.matches import fetch_today_matches, fetch_yesterday_results
 
 
 def update_matches_job():
@@ -13,10 +13,8 @@ def update_matches_job():
     db: Session = SessionLocal()
     try:
         fetch_today_matches(db=db)
-        print("Partidas de hoje carregadas com sucesso.")
 
         fetch_yesterday_results(db=db)
-        print("Resultados de ontem carregados e placares atualizados.")
     except Exception as e:
         print(f"Erro na tarefa de atualização: {str(e)}")
     finally:

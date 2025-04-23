@@ -1,7 +1,4 @@
-
-import axios from 'axios';
-
-const BASE_URL = 'http://localhost:8000';
+import { api } from "./apiService";
 
 export interface User {
   id: number;
@@ -9,21 +6,6 @@ export interface User {
   email: string;
   total_points: number;
 }
-
-export const api = axios.create({
-  baseURL: BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('@bolao:token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
 
 export const authService = {
   login: async (username: string, password: string) => {

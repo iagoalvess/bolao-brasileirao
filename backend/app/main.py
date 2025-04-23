@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .routers import users, matches, predictions
 from .database.connection import Base, engine
-from .scheduler import start_scheduler
+from .services.scheduler_service import start_scheduler
 from .models.user import User
 from .models.match import Match
 from .models.prediction import Prediction
@@ -18,9 +18,9 @@ app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Em produção, especifique os domínios permitidos
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],  # Permite todos os métodos
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
