@@ -1,119 +1,77 @@
-from bs4 import BeautifulSoup
-from datetime import date, timedelta
-import httpx
-from typing import Dict, List, Any
+import requests
+from sqlalchemy.orm import Session
+from datetime import datetime
+from ..models.match import Match
 
 
 class MatchService:
-    BASE_URL = "https://www.placardefutebol.com.br"
-    HEADERS = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-    }
-
     @staticmethod
-    async def _fetch_page(url: str) -> BeautifulSoup:
-        async with httpx.AsyncClient() as client:
-            response = await client.get(url, headers=MatchService.HEADERS)
-            response.raise_for_status()
-            return BeautifulSoup(response.text, "lxml")
-
-    @staticmethod
-    def _extract_championships(page: BeautifulSoup) -> List[Any]:
-        return page.find_all("div", class_="container content")
-
-    @staticmethod
-    def _is_serie_a(championship: BeautifulSoup) -> bool:
-        link = championship.find("a")
-        return bool(
-            link and "href" in link.attrs and "/brasileirao-serie-a/" in link["href"]
+    def sync_all_matches_from_api(db: Session) -> None:
+        url = (
+            "https://cbf.com.br/api/proxy?path=/jogos/tabela-detalhada/campeonato/12606"
         )
+        response = requests.get(url, verify=False)
 
-    @staticmethod
-    def _parse_match(match: BeautifulSoup, date_str: str) -> Dict[str, Any] | None:
-        try:
-            status = match.find("span", class_="status-name").text.strip()
-            teams = match.find_all("div", class_="team-name")
-            scoreboard = match.find_all("span", class_="badge badge-default")
+        if response.status_code != 200:
+            raise Exception(f"Erro ao acessar API da CBF: {response.status_code}")
 
-            if len(teams) < 2:
-                return None
+        data = response.json()
 
-            home = teams[0].text.strip()
-            away = teams[1].text.strip()
-            time_str = status.split(" ")[1] if " " in status else "00:00"
-            match_date = f"{date_str} {time_str}"
+        for fase_info in data.values():
+            jogos = fase_info.get("jogos", [])
 
-            info = {
-                "match": f"{home} x {away}",
-                "status": status,
-                "league": "Campeonato Brasileiro Série A",
-                "team_home": home,
-                "team_visitor": away,
-                "match_date": match_date,
-            }
+            for jogo in jogos:
+                home_team = jogo["mandante"]["nome"]
+                away_team = jogo["visitante"]["nome"]
+                round_number = int(jogo.get("rodada", 0))
+                date_str = jogo.get("data", "").strip()
+                time_str = jogo.get("hora") or "00:00"
 
-            if len(scoreboard) == 2:
-                info.update(
-                    {
-                        "scoreboard": {
-                            "home": int(scoreboard[0].text),
-                            "visitor": int(scoreboard[1].text),
-                        },
-                        "status": "FINISHED" if "ENCERRADO" in status else "LIVE",
-                    }
+                try:
+                    match_date = datetime.strptime(
+                        f"{date_str} {time_str}", "%d/%m/%Y %H:%M"
+                    )
+                except ValueError:
+                    match_date = datetime.strptime(
+                        "01/01/1900 00:00", "%d/%m/%Y %H:%M"
+                    )
+
+                match_id = Match.generate_match_id(
+                    match_date.isoformat(), home_team, away_team
                 )
-            else:
-                info["start_time"] = status
-                info["status"] = "SCHEDULED"
 
-            return info
-        except Exception:
-            return None
+                existing_match = db.query(Match).filter_by(match_id=match_id).first()
 
-    @staticmethod
-    async def fetch_today_matches() -> List[Dict[str, Any]]:
-        url = f"{MatchService.BASE_URL}/jogos-de-hoje"
-        page = await MatchService._fetch_page(url)
+                def parse_score(score):
+                    return int(score) if score and score.isdigit() else None
 
-        championships = MatchService._extract_championships(page)
-        results = []
-        date_str = date.today().strftime("%Y-%m-%d")
+                home_score = parse_score(jogo["mandante"].get("gols"))
+                away_score = parse_score(jogo["visitante"].get("gols"))
 
-        for championship in championships:
-            if not MatchService._is_serie_a(championship):
-                continue
-            matches = championship.find_all(
-                "div", class_="row align-items-center content"
-            )
-            for match in matches:
-                match_info = MatchService._parse_match(match, date_str)
-                if match_info:
-                    results.append(match_info)
+                values = {
+                    "round": round_number,
+                    "match_id": match_id,
+                    "match_date": match_date,
+                    "home_team": home_team,
+                    "away_team": away_team,
+                    "home_score": home_score,
+                    "away_score": away_score,
+                    "stadium": jogo.get("estadio", "").strip(),
+                    "city": jogo.get("cidade", "").strip(),
+                    "state": jogo.get("uf", "").strip(),
+                    "broadcasters": jogo.get("transmissao", "").strip(),
+                    "status": (
+                        "FINISHED"
+                        if home_score is not None and away_score is not None
+                        else "SCHEDULED"
+                    ),
+                }
 
-        if not results:
-            raise ValueError("Nenhuma partida da Série A encontrada para hoje")
-        return results
+                if existing_match:
+                    for k, v in values.items():
+                        setattr(existing_match, k, v)
+                else:
+                    new_match = Match(**values)
+                    db.add(new_match)
 
-    @staticmethod
-    async def fetch_yesterday_results() -> List[Dict[str, Any]]:
-        yesterday = date.today() - timedelta(days=1)
-        date_str = yesterday.strftime("%Y-%m-%d")
-        url = f"{MatchService.BASE_URL}/jogos-de-ontem"
-        page = await MatchService._fetch_page(url)
-
-        championships = MatchService._extract_championships(page)
-        results = []
-
-        for championship in championships:
-            if not MatchService._is_serie_a(championship):
-                continue
-            matches = championship.find_all(
-                "div", class_="row align-items-center content"
-            )
-            for match in matches:
-                match_info = MatchService._parse_match(match, date_str)
-                if match_info:
-                    match_info["status"] = "FINISHED"
-                    results.append(match_info)
-
-        return results
+        db.commit()

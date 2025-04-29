@@ -7,7 +7,6 @@ import Register from "./pages/Register";
 import HomePage from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import Matches from "./pages/Matches";
-import Historico from "./pages/Historico";
 import Ranking from "./pages/Ranking";
 import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -45,14 +44,6 @@ const App = () => (
             element={
               <ProtectedRoute>
                 <Matches />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/historico"
-            element={
-              <ProtectedRoute>
-                <Historico />
               </ProtectedRoute>
             }
           />

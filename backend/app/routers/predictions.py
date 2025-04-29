@@ -61,10 +61,7 @@ async def get_user_predictions(
     predictions = (
         db.query(Prediction).filter(Prediction.user_id == current_user.id).all()
     )
-    if not predictions:
-        raise HTTPException(
-            status_code=404, detail="Nenhum palpite encontrado para o usuário"
-        )
+
     return predictions
 
 

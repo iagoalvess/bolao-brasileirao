@@ -5,16 +5,15 @@ from datetime import datetime
 import pytz
 
 from ..database.connection import SessionLocal
-from ..routers.matches import fetch_today_matches, fetch_yesterday_results
+from ..services.match_service import MatchService  # ✅ Importa MatchService
 
 
 def update_matches_job():
     print(f"Executando tarefa de atualização de partidas às {datetime.now()}")
     db: Session = SessionLocal()
     try:
-        fetch_today_matches(db=db)
-
-        fetch_yesterday_results(db=db)
+        MatchService.sync_all_matches_from_api(db=db)
+        print("Sincronização de partidas concluída com sucesso.")
     except Exception as e:
         print(f"Erro na tarefa de atualização: {str(e)}")
     finally:

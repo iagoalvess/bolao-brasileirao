@@ -3,18 +3,20 @@ from datetime import datetime
 from typing import Optional
 
 
-class Scoreboard(BaseModel):
-    home: int
-    visitor: int
-
-
 class MatchBase(BaseModel):
     match_id: str
     match_date: datetime
     home_team: str
     away_team: str
     status: str
-    scoreboard: Optional[Scoreboard] = None
+
+    home_score: Optional[int] = None
+    away_score: Optional[int] = None
+    stadium: Optional[str] = None
+    city: Optional[str] = None
+    state: Optional[str] = None
+    broadcasters: Optional[str] = None
+
 
 class MatchCreate(MatchBase):
     pass
