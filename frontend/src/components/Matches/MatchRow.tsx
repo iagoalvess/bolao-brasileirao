@@ -29,6 +29,21 @@ const MatchRow: React.FC<MatchRowProps> = ({
 }) => {
   const isFinished = match.status === "FINISHED";
 
+  const renderTeamLogo = (team: string) => {
+    const formattedTeamName = team
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/\s+/g, "_")
+      .replace(/[^\w\s]/g, "");
+
+    const teamLogoPath = `/icons/${formattedTeamName}.png`;
+
+    return (
+      <img src={teamLogoPath} alt={team} className="w-8 h-8 object-contain" />
+    );
+  };
+
   return (
     <TableRow>
       <TableCell>
@@ -41,8 +56,19 @@ const MatchRow: React.FC<MatchRowProps> = ({
         })}
       </TableCell>
 
-      <TableCell>{match.home_team}</TableCell>
-      <TableCell>{match.away_team}</TableCell>
+      <TableCell className="min-w-[200px] w-[220px]">
+        <div className="flex items-center gap-2">
+          {renderTeamLogo(match.home_team)}
+          <span>{match.home_team}</span>
+        </div>
+      </TableCell>
+
+      <TableCell className="min-w-[200px] w-[220px]">
+        <div className="flex items-center gap-2">
+          {renderTeamLogo(match.away_team)}
+          <span>{match.away_team}</span>
+        </div>
+      </TableCell>
 
       <TableCell>
         {isFinished ? (
