@@ -46,7 +46,7 @@ const MatchRow: React.FC<MatchRowProps> = ({
 
   return (
     <TableRow>
-      <TableCell>
+      <TableCell className="min-w-[200px] w-[220px]">
         {new Date(match.match_date).toLocaleString("pt-BR", {
           weekday: "long",
           day: "2-digit",

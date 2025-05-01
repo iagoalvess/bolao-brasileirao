@@ -8,33 +8,32 @@ import {
 import { LayoutGrid, LayoutList } from "lucide-react";
 
 const HomePageNavigation = () => (
-  <div className="flex justify-center my-10">
-    <NavigationMenu>
-      <NavigationMenuList className="bg-white/90 rounded-xl shadow-lg px-6 py-4 space-x-6">
-        <NavigationMenuItem>
-          <Link to="/matches">
-            <NavigationMenuLink className="flex items-center gap-3 p-4 rounded-lg transition-transform transform hover:scale-105 hover:bg-soccer-yellow/80 hover:text-soccer-black text-soccer-black bg-white shadow-md hover:shadow-xl font-medium text-lg">
-              <LayoutGrid
-                size={22}
-                className="text-soccer-yellow group-hover:text-soccer-black transition-all"
-              />
-              <span className="tracking-wide">Partidas</span>
-            </NavigationMenuLink>
-          </Link>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <Link to="/ranking">
-            <NavigationMenuLink className="flex items-center gap-3 p-4 rounded-lg transition-transform transform hover:scale-105 hover:bg-soccer-yellow/80 hover:text-soccer-black text-soccer-black bg-white shadow-md hover:shadow-xl font-medium text-lg">
-              <LayoutList
-                size={22}
-                className="text-soccer-yellow group-hover:text-soccer-black transition-all"
-              />
-              <span className="tracking-wide">Ranking</span>
-            </NavigationMenuLink>
-          </Link>
-        </NavigationMenuItem>
-      </NavigationMenuList>
-    </NavigationMenu>
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <Link
+      to="/matches"
+      className="group flex items-center gap-4 p-6 bg-soccer-black/50 rounded-xl border border-white/10 hover:border-soccer-yellow transition-all"
+    >
+      <div className="p-3 bg-soccer-yellow/20 rounded-lg">
+        <LayoutGrid size={24} className="text-soccer-yellow" />
+      </div>
+      <div>
+        <h3 className="text-lg font-semibold text-white">Partidas</h3>
+        <p className="text-sm text-white/60">Faça seus palpites</p>
+      </div>
+    </Link>
+
+    <Link
+      to="/ranking"
+      className="group flex items-center gap-4 p-6 bg-soccer-black/50 rounded-xl border border-white/10 hover:border-soccer-green transition-all"
+    >
+      <div className="p-3 bg-soccer-green/20 rounded-lg">
+        <LayoutList size={24} className="text-soccer-green" />
+      </div>
+      <div>
+        <h3 className="text-lg font-semibold text-white">Ranking</h3>
+        <p className="text-sm text-white/60">Ver classificação</p>
+      </div>
+    </Link>
   </div>
 );
 

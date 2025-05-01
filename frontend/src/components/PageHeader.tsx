@@ -1,6 +1,6 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { LogOut, ArrowLeft } from "lucide-react";
+import { LogOut, ArrowLeft, User } from "lucide-react";
 
 interface PageHeaderProps {
   showBackButton?: boolean;
@@ -16,49 +16,59 @@ const PageHeader = ({
   const { user, signOut } = useAuth();
 
   return (
-    <div className="flex justify-between items-center mb-8 flex-wrap gap-4 border-b border-white/20 pb-4">
-      <div>
-        <div className="flex items-center gap-3">
-          <img
-            src="/BrasileiraoLogo.png"
-            alt="Brasileirão Serie A"
-            className="w-12 h-12 rounded-full object-cover shadow-lg"
-          />
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-white drop-shadow-lg">
-            Bolão do Futebol
-          </h1>
-        </div>
-        <p className="text-xl text-white/90 font-medium drop-shadow-sm mt-2">
-          Seu espaço para palpites no Brasileirão
-        </p>
-      </div>
-
-      <div className="flex items-center gap-4 flex-wrap">
+    <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 border-b border-white/20 pb-4">
+      <div className="flex items-center gap-4">
         {showBackButton && (
           <Button
             onClick={onBackClick}
             variant="outline"
-            className="border-soccer-yellow text-soccer-yellow hover:bg-soccer-yellow hover:text-soccer-black flex items-center gap-2"
+            className="border-soccer-yellow text-soccer-yellow hover:bg-soccer-yellow/10 flex items-center gap-2 order-1"
           >
             <ArrowLeft size={18} />
             {backButtonLabel}
           </Button>
         )}
-        <div className="flex items-center gap-2 bg-white/10 rounded-full px-4 py-2">
-          <span className="text-sm text-white/70">Bem-vindo(a)</span>
-          <span className="text-base font-bold text-white">
-            {user?.username}
-          </span>
+
+        <div className="flex items-center gap-3 order-2">
+          <img
+            src="/BrasileiraoLogo.png"
+            alt="Brasileirão Serie A"
+            className="w-12 h-12 rounded-full object-cover shadow-lg"
+          />
+          <div>
+            <h1 className="text-2xl sm:text-4xl font-bold text-white drop-shadow-lg">
+              Bolão do Futebol
+            </h1>
+            <p className="text-sm sm:text-base text-white/80 mt-1">
+              Seu espaço para palpites no Brasileirão
+            </p>
+          </div>
         </div>
-        <Button
-          onClick={signOut}
-          className="bg-red-500 hover:bg-red-600 text-white flex items-center gap-2"
-        >
-          <LogOut size={18} />
-          Sair
-        </Button>
       </div>
-    </div>
+
+      <div className="flex items-center gap-4 order-3 ml-auto sm:ml-0">
+        <div className="flex items-center gap-3 bg-white/5 rounded-lg px-4 py-2 border border-white/10">
+          <div className="bg-soccer-yellow/20 p-2 rounded-full">
+            <User size={20} className="text-soccer-yellow" />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-xs text-white/60">Bem-vindo(a)</span>
+            <span className="text-sm font-medium text-white truncate max-w-[120px]">
+              {user?.username}
+            </span>
+          </div>
+          <Button
+            onClick={signOut}
+            variant="ghost"
+            size="icon"
+            className="hover:bg-red-500/20 text-red-400 hover:text-red-300"
+            title="Sair"
+          >
+            <LogOut size={18} />
+          </Button>
+        </div>
+      </div>
+    </header>
   );
 };
 

@@ -62,15 +62,20 @@ const MatchesTable: React.FC<MatchesTableProps> = ({
         ) : Array.isArray(matches) && matches.length > 0 ? (
           <Table className="rounded-xl overflow-hidden">
             <TableHeader>
-              <TableRow className="bg-gradient-to-r from-soccer-yellow to-soccer-green text-white">
-                <TableHead className="px-4 py-3">Horário</TableHead>
-                <TableHead className="px-4 py-3">Casa</TableHead>
-                <TableHead className="px-4 py-3">Fora</TableHead>
-                <TableHead className="px-4 py-3">Resultado</TableHead>
-                <TableHead className="px-4 py-3">Meu palpite</TableHead>
-                <TableHead className="px-4 py-3">Ação</TableHead>
+              <TableRow className="bg-gradient-to-r from-soccer-yellow to-soccer-green text-white font-bold">
+                <TableHead className="px-4 py-3 text-white">Horário</TableHead>
+                <TableHead className="px-4 py-3 text-white">Casa</TableHead>
+                <TableHead className="px-4 py-3 text-white">Fora</TableHead>
+                <TableHead className="px-4 py-3 text-white">
+                  Resultado
+                </TableHead>
+                <TableHead className="px-4 py-3 text-white">
+                  Palpite
+                </TableHead>
+                <TableHead className="px-4 py-3 text-white">Situação</TableHead>
               </TableRow>
             </TableHeader>
+
             <TableBody>
               {matches.map((match) => (
                 <MatchRow
