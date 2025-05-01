@@ -7,9 +7,10 @@ import {
   TableRow,
   TableCell,
 } from "@/components/ui/table";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Match } from "@/types/match";
 import { Prediction } from "@/types/prediction";
+import { CalendarCheck } from "lucide-react";
 
 interface MatchesTableProps {
   matches: Match[];
@@ -42,24 +43,32 @@ const MatchesTable: React.FC<MatchesTableProps> = ({
   getPredictionForMatch,
 }) => {
   return (
-    <Card className="shadow-2xl border-2 border-soccer-yellow bg-white/95 rounded-xl mt-6">
+    <Card className="shadow-2xl border-2 border-soccer-yellow bg-white/95 rounded-2xl mt-6">
+      <CardHeader className="flex items-center gap-3">
+        <CalendarCheck className="text-soccer-green" size={28} />
+        <CardTitle className="text-2xl font-semibold text-soccer-black drop-shadow-sm">
+          Partidas da Rodada
+        </CardTitle>
+      </CardHeader>
       <CardContent className="p-6">
         {isLoading ? (
-          <div className="text-center py-6">Carregando partidas...</div>
+          <div className="text-center py-6 text-lg text-gray-600">
+            Carregando partidas...
+          </div>
         ) : error ? (
-          <div className="text-center text-red-600 py-6">
+          <div className="text-center text-red-600 py-6 text-lg">
             {error?.response?.data?.detail || "Erro ao carregar partidas."}
           </div>
         ) : Array.isArray(matches) && matches.length > 0 ? (
-          <Table>
+          <Table className="rounded-xl overflow-hidden">
             <TableHeader>
-              <TableRow>
-                <TableHead>Horário</TableHead>
-                <TableHead>Casa</TableHead>
-                <TableHead>Fora</TableHead>
-                <TableHead>Resultado</TableHead>
-                <TableHead>Meu palpite</TableHead>
-                <TableHead>Ação</TableHead>
+              <TableRow className="bg-gradient-to-r from-soccer-yellow to-soccer-green text-white">
+                <TableHead className="px-4 py-3">Horário</TableHead>
+                <TableHead className="px-4 py-3">Casa</TableHead>
+                <TableHead className="px-4 py-3">Fora</TableHead>
+                <TableHead className="px-4 py-3">Resultado</TableHead>
+                <TableHead className="px-4 py-3">Meu palpite</TableHead>
+                <TableHead className="px-4 py-3">Ação</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -78,7 +87,7 @@ const MatchesTable: React.FC<MatchesTableProps> = ({
             </TableBody>
           </Table>
         ) : (
-          <div className="text-center py-6">
+          <div className="text-center py-6 text-lg text-gray-600">
             Nenhuma partida para essa rodada.
           </div>
         )}

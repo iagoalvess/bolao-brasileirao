@@ -10,26 +10,26 @@ import { LayoutGrid, LayoutList } from "lucide-react";
 const HomePageNavigation = () => (
   <div className="flex justify-center my-10">
     <NavigationMenu>
-      <NavigationMenuList className="bg-white/95 rounded-xl shadow-2xl px-6 py-4 space-x-4">
+      <NavigationMenuList className="bg-white/90 rounded-xl shadow-lg px-6 py-4 space-x-6">
         <NavigationMenuItem>
           <Link to="/matches">
-            <NavigationMenuLink className="flex items-center gap-3 p-4 rounded-lg hover:bg-soccer-yellow hover:text-soccer-black transition-all duration-200 font-semibold text-soccer-black bg-white shadow-sm hover:shadow-md">
+            <NavigationMenuLink className="flex items-center gap-3 p-4 rounded-lg transition-transform transform hover:scale-105 hover:bg-soccer-yellow/80 hover:text-soccer-black text-soccer-black bg-white shadow-md hover:shadow-xl font-medium text-lg">
               <LayoutGrid
-                size={20}
-                className="text-soccer-yellow group-hover:text-soccer-black transition"
+                size={22}
+                className="text-soccer-yellow group-hover:text-soccer-black transition-all"
               />
-              Partidas
+              <span className="tracking-wide">Partidas</span>
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
         <NavigationMenuItem>
           <Link to="/ranking">
-            <NavigationMenuLink className="flex items-center gap-3 p-4 rounded-lg hover:bg-soccer-yellow hover:text-soccer-black transition-all duration-200 font-semibold text-soccer-black bg-white shadow-sm hover:shadow-md">
+            <NavigationMenuLink className="flex items-center gap-3 p-4 rounded-lg transition-transform transform hover:scale-105 hover:bg-soccer-yellow/80 hover:text-soccer-black text-soccer-black bg-white shadow-md hover:shadow-xl font-medium text-lg">
               <LayoutList
-                size={20}
-                className="text-soccer-yellow group-hover:text-soccer-black transition"
+                size={22}
+                className="text-soccer-yellow group-hover:text-soccer-black transition-all"
               />
-              Ranking
+              <span className="tracking-wide">Ranking</span>
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>

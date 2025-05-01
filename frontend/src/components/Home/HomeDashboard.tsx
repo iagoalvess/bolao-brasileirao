@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
 import { dashboardService } from "@/services/dashboardService";
+import { FaTrophy, FaClock, FaUserAlt } from "react-icons/fa";
 
 const HomeDashboard = () => {
   const { user } = useAuth();
@@ -17,7 +18,6 @@ const HomeDashboard = () => {
         }
 
         const summaryRes = await dashboardService.getSummary();
-        console.log("user no contexto:", user);
         const userRes = await dashboardService.getUserSummary(Number(user.id));
         setSummary(summaryRes);
         setUserData(userRes);
@@ -35,42 +35,47 @@ const HomeDashboard = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-10">
-      <Card className="bg-white/95 shadow-lg border-l-4 border-soccer-yellow">
+      <Card className="bg-white/90 shadow-xl border-l-4 border-soccer-yellow rounded-xl hover:shadow-2xl">
         <CardHeader>
-          <CardTitle className="text-2xl text-soccer-black">
-            Resumo Geral
+          <CardTitle className="text-2xl text-soccer-black flex items-center space-x-2">
+            <FaClock size={24} className="text-soccer-yellow" />
+            <span>Resumo Geral</span>
           </CardTitle>
         </CardHeader>
-        <CardContent className="text-gray-800 space-y-2">
+        <CardContent className="text-gray-800 space-y-3">
           <p>
-            Rodada Atual: <strong>{summary.current_round}</strong>
+            <strong>Rodada Atual:</strong> <span>{summary.current_round}</span>
           </p>
           <p>
-            Total de Palpites: <strong>{summary.total_predictions}</strong>
+            <strong>Total de Palpites:</strong>{" "}
+            <span>{summary.total_predictions}</span>
           </p>
           <p>
-            Maior Pontuador: <strong>{summary.top_scorer.username}</strong> (
+            <strong>Maior Pontuador:</strong>{" "}
+            <span>{summary.top_scorer.username}</span> (
             {summary.top_scorer.points} pontos)
           </p>
         </CardContent>
       </Card>
 
-      <Card className="bg-white/95 shadow-lg border-l-4 border-soccer-green">
+      <Card className="bg-white/90 shadow-xl border-l-4 border-soccer-green rounded-xl hover:shadow-2xl">
         <CardHeader>
-          <CardTitle className="text-2xl text-soccer-black">
-            Seu Desempenho
+          <CardTitle className="text-2xl text-soccer-black flex items-center space-x-2">
+            <FaUserAlt size={24} className="text-soccer-green" />
+            <span>Seu Desempenho</span>
           </CardTitle>
         </CardHeader>
-        <CardContent className="text-gray-800 space-y-2">
+        <CardContent className="text-gray-800 space-y-3">
           <p>
-            Pontuação Total: <strong>{userData.total_points}</strong>
+            <strong>Pontuação Total:</strong>{" "}
+            <span>{userData.total_points}</span>
           </p>
           <p>
-            Ranking Atual: <strong>{userData.current_rank}</strong>
+            <strong>Ranking Atual:</strong> <span>{userData.current_rank}</span>
           </p>
           <p>
-            Palpites Pendentes:{" "}
-            <strong
+            <strong>Palpites Pendentes:</strong>{" "}
+            <span
               className={
                 userData.has_pending_predictions
                   ? "text-red-600"
@@ -78,7 +83,7 @@ const HomeDashboard = () => {
               }
             >
               {userData.has_pending_predictions ? "Sim" : "Não"}
-            </strong>
+            </span>
           </p>
         </CardContent>
       </Card>

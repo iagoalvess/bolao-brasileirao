@@ -10,12 +10,12 @@ const RoundSelector: React.FC<RoundSelectorProps> = ({
   onChange,
 }) => {
   return (
-    <div className="mb-4">
-      <label className="font-semibold mr-2">Selecione a rodada:</label>
+    <div className="mb-6 flex items-center gap-4">
+      <label className="font-semibold text-xl text-soccer-black">Rodada:</label>
       <select
         value={selectedRound}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="border border-gray-300 rounded px-2 py-1"
+        className="bg-white border-2 border-soccer-yellow text-lg rounded-lg py-2 px-4 shadow-md hover:bg-soccer-yellow/20 focus:outline-none focus:ring-2 focus:ring-soccer-yellow transition"
       >
         {Array.from({ length: 38 }, (_, i) => i + 1).map((round) => (
           <option key={round} value={round}>

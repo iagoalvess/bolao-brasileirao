@@ -21,9 +21,9 @@ const RankingPage = () => {
       .map((user: User) => ({
         id: user.id,
         username: user.username,
-        pontos: user.total_points,
+        total_points: user.total_points,
       }))
-      .sort((a, b) => b.pontos - a.pontos);
+      .sort((a, b) => b.total_points - a.total_points);
   }, [users]);
 
   return (
