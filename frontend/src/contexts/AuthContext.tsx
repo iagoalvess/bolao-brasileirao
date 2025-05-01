@@ -1,6 +1,12 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { authService } from '@/services/userService';
-import { useNavigate } from 'react-router-dom';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
+import { authService } from "@/services/userService";
+import { useNavigate } from "react-router-dom";
 
 interface User {
   id: string;
@@ -29,8 +35,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('@bolao:token');
-    const storedUser = localStorage.getItem('@bolao:user');
+    const token = localStorage.getItem("@bolao:token");
+    const storedUser = localStorage.getItem("@bolao:user");
 
     if (token && storedUser) {
       setUser(JSON.parse(storedUser));
@@ -43,18 +49,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       setLoading(true);
       const response = await authService.login(username, password);
-      
+  
       const { access_token } = response;
-      
-      const userData = {
-        id: 'user-id',
-        username,
-        email: '',
-      };
-      
+      if (!access_token) {
+        throw new Error('Token não recebido');
+      }
+  
       localStorage.setItem('@bolao:token', access_token);
+  
+      const userResponse = await authService.getMe(access_token);
+  
+      const userData = {
+        id: userResponse.id,
+        username: userResponse.username,
+        email: userResponse.email,
+      };
+  
       localStorage.setItem('@bolao:user', JSON.stringify(userData));
-      
+  
       setUser(userData);
       navigate('/home');
     } catch (error) {
@@ -64,12 +76,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setLoading(false);
     }
   }
+  
 
   async function signUp(username: string, email: string, password: string) {
     try {
       setLoading(true);
       await authService.register(username, email, password);
-      navigate('/login');
+      navigate("/login");
     } catch (error) {
       console.error("Erro ao criar conta:", error);
       throw error;
@@ -79,21 +92,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   function signOut() {
-    localStorage.removeItem('@bolao:token');
-    localStorage.removeItem('@bolao:user');
+    localStorage.removeItem("@bolao:token");
+    localStorage.removeItem("@bolao:user");
     setUser(null);
-    navigate('/login');
+    navigate("/login");
   }
 
   return (
-    <AuthContext.Provider value={{ 
-      user, 
-      isAuthenticated: !!user,
-      loading,
-      signIn,
-      signUp,
-      signOut
-    }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isAuthenticated: !!user,
+        loading,
+        signIn,
+        signUp,
+        signOut,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

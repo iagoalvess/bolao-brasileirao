@@ -5,7 +5,7 @@ from datetime import datetime
 import pytz
 
 from ..database.connection import SessionLocal
-from ..services.match_service import MatchService  # ✅ Importa MatchService
+from ..services.match_service import MatchService
 
 
 def update_matches_job():

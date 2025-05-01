@@ -7,8 +7,6 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import RegisterForm from "./RegisterForm";
-import { useAuth } from "@/contexts/AuthContext";
-import { useToast } from "@/components/ui/use-toast";
 import { UserPlus } from "lucide-react";
 import { Link } from "react-router-dom";
 

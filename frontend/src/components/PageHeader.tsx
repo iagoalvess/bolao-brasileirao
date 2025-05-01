@@ -1,6 +1,5 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
 import { LogOut } from "lucide-react";
 
 interface PageHeaderProps {
@@ -15,7 +14,6 @@ const PageHeader = ({
   onBackClick,
 }: PageHeaderProps) => {
   const { user, signOut } = useAuth();
-  const navigate = useNavigate();
 
   return (
     <div className="flex justify-between items-center mb-10 flex-wrap gap-6">

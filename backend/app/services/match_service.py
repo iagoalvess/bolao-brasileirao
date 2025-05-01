@@ -2,6 +2,8 @@ import requests
 from sqlalchemy.orm import Session
 from datetime import datetime
 from ..models.match import Match
+from ..models.prediction import Prediction
+from ..models.user import User
 
 
 class MatchService:

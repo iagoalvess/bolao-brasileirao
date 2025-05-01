@@ -7,9 +7,6 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import LoginForm from "./LoginForm";
-import { useAuth } from "@/contexts/AuthContext";
-import { useToast } from "@/components/ui/use-toast";
-import { useState } from "react";
 import { Link } from "react-router-dom";
 
 interface LoginCardProps {

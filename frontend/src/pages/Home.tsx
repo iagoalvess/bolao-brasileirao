@@ -1,6 +1,8 @@
 import PageHeader from "@/components/PageHeader";
 import HomePageNavigation from "@/components/HomeNavigation";
 import WelcomeCard from "@/components/WelcomeCard";
+import HomeDashboard from "@/components/HomeDashboard";
+
 
 const HomePage = () => {
   return (
@@ -9,6 +11,7 @@ const HomePage = () => {
         <PageHeader />
         <HomePageNavigation />
         <WelcomeCard />
+        <HomeDashboard />
       </div>
     </div>
   );
