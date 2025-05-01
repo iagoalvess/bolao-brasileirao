@@ -7,11 +7,15 @@ from ..models.user import User
 class ScoringService:
     @staticmethod
     def calculate_prediction_points(prediction: Prediction, match: Match) -> int:
-        if match.status != "FINISHED" or not match.scoreboard:
+        if (
+            match.status != "FINISHED"
+            or match.home_score is None
+            or match.away_score is None
+        ):
             return 0
 
-        actual_home_score = match.scoreboard["home"]
-        actual_away_score = match.scoreboard["visitor"]
+        actual_home_score = match.home_score
+        actual_away_score = match.away_score
         predicted_home_score = prediction.home_team_score
         predicted_away_score = prediction.away_team_score
 
@@ -49,7 +53,6 @@ class ScoringService:
         db.add(prediction)
 
         user = prediction.user
-
         user.total_points = sum(pred.points for pred in user.predictions)
         db.add(user)
 

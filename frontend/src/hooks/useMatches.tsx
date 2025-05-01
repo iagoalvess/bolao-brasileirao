@@ -22,9 +22,14 @@ export const useMatches = () => {
     enabled: !!selectedRound,
   });
 
-  const { data: myPredictions = [] } = useQuery({
-    queryKey: ["my-predictions"],
-    queryFn: predictionService.getMyPredictions,
+  const {
+    data: myPredictions = [],
+    isLoading: isPredictionsLoading,
+    error: predictionsError,
+  } = useQuery({
+    queryKey: ["my-predictions", selectedRound],
+    queryFn: () => predictionService.getMyPredictionsByRound(selectedRound),
+    enabled: !!selectedRound,
   });
 
   useEffect(() => {
@@ -35,7 +40,11 @@ export const useMatches = () => {
       };
       return acc;
     }, {} as typeof predictions);
-    setPredictions(mapped);
+
+    const isEqual = JSON.stringify(predictions) === JSON.stringify(mapped);
+    if (!isEqual) {
+      setPredictions(mapped);
+    }
   }, [myPredictions]);
 
   const mutation = useMutation({
@@ -46,7 +55,9 @@ export const useMatches = () => {
         description: "Seu palpite foi registrado com sucesso.",
       });
       queryClient.invalidateQueries({ queryKey: ["matches", selectedRound] });
-      queryClient.invalidateQueries({ queryKey: ["my-predictions"] });
+      queryClient.invalidateQueries({
+        queryKey: ["my-predictions", selectedRound],
+      });
     },
     onError: (err: any) => {
       toast({

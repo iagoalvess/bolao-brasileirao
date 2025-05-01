@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -68,8 +68,21 @@ async def get_user_predictions(
 @router.get("/", response_model=List[PredictionResponse])
 async def get_all_predictions(db: Session = Depends(get_db)):
     predictions = db.query(Prediction).all()
-    if not predictions:
-        raise HTTPException(
-            status_code=404, detail="Nenhum palpite encontrado no banco de dados"
-        )
+
+    return predictions
+
+
+@router.get("/by-round", response_model=List[PredictionResponse])
+async def get_my_predictions_by_round(
+    round: int = Query(..., description="Número da rodada"),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    predictions = (
+        db.query(Prediction)
+        .join(Match, Prediction.match_id == Match.id)
+        .filter(Prediction.user_id == current_user.id, Match.round == round)
+        .all()
+    )
+
     return predictions

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
-import LoginCard from '@/components/LoginCard';
+import LoginCard from '@/components/Login/LoginCard';
 
 const LoginPage = () => {
   const [loading, setLoading] = useState(false);
@@ -24,7 +24,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-soccer-field to-soccer-green p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-soccer-field via-soccer-green to-soccer-yellow p-6">
       <div className="w-full max-w-md">
         <LoginCard onLogin={handleLogin} loading={loading} />
       </div>

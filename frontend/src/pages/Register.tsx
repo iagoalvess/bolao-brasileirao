@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/components/ui/use-toast";
-import RegisterCard from "@/components/RegisterCard";
+import RegisterCard from "@/components/Register/RegisterCard";
 
 const RegisterPage = () => {
   const [loading, setLoading] = useState(false);
@@ -43,7 +43,7 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-soccer-field to-soccer-green p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-soccer-field via-soccer-green to-soccer-yellow p-6">
       <div className="w-full max-w-md">
         <RegisterCard onRegister={handleRegister} loading={loading} />
       </div>

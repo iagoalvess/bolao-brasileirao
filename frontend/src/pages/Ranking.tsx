@@ -4,7 +4,7 @@ import { authService, User } from "@/services/userService";
 import { useNavigate } from "react-router-dom";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import PageHeader from "@/components/PageHeader";
-import RankingCard from "@/components/RankingCard";
+import RankingCard from "@/components/Ranking/RankingCard";
 
 const RankingPage = () => {
   const navigate = useNavigate();

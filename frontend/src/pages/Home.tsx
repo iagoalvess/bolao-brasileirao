@@ -1,7 +1,7 @@
 import PageHeader from "@/components/PageHeader";
-import HomePageNavigation from "@/components/HomeNavigation";
-import WelcomeCard from "@/components/WelcomeCard";
-import HomeDashboard from "@/components/HomeDashboard";
+import HomePageNavigation from "@/components/Home/HomeNavigation";
+import WelcomeCard from "@/components/Home/WelcomeCard";
+import HomeDashboard from "@/components/Home/HomeDashboard";
 
 
 const HomePage = () => {

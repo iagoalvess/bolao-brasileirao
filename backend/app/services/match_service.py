@@ -1,6 +1,8 @@
 import requests
 from sqlalchemy.orm import Session
 from datetime import datetime
+
+from ..services.scoring_service import ScoringService
 from ..models.match import Match
 from ..models.prediction import Prediction
 from ..models.user import User
@@ -34,9 +36,7 @@ class MatchService:
                         f"{date_str} {time_str}", "%d/%m/%Y %H:%M"
                     )
                 except ValueError:
-                    match_date = datetime.strptime(
-                        "01/01/1900 00:00", "%d/%m/%Y %H:%M"
-                    )
+                    match_date = datetime.strptime("01/01/1900 00:00", "%d/%m/%Y %H:%M")
 
                 match_id = Match.generate_match_id(
                     match_date.isoformat(), home_team, away_team
@@ -77,3 +77,5 @@ class MatchService:
                     db.add(new_match)
 
         db.commit()
+
+        ScoringService.update_all_predictions(db)

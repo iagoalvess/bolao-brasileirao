@@ -4,7 +4,7 @@ from app.database.connection import get_db
 from app.services import dashboard_service
 from app.schemas.dashboard import DashboardSummary, UserDashboard
 
-router = APIRouter(prefix="/dashboard", tags=["Dashboard"])
+router = APIRouter(prefix="/dashboard", tags=["dashboard"])
 
 
 @router.get("/summary", response_model=DashboardSummary)
