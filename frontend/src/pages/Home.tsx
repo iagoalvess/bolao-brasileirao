@@ -2,6 +2,7 @@ import PageHeader from "@/components/PageHeader";
 import HomePageNavigation from "@/components/Home/HomeNavigation";
 import WelcomeCard from "@/components/Home/WelcomeCard";
 import HomeDashboard from "@/components/Home/HomeDashboard";
+import NewsDashboard from "@/components/Home/News";
 
 
 const HomePage = () => {
@@ -12,6 +13,7 @@ const HomePage = () => {
         <HomePageNavigation />
         <WelcomeCard />
         <HomeDashboard />
+        <NewsDashboard />
       </div>
     </div>
   );
