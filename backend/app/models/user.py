@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from ..database.connection import Base
 
+
 class User(Base):
     __tablename__ = "users"
 
@@ -10,5 +11,7 @@ class User(Base):
     email = Column(String(100), unique=True, nullable=False)
     password = Column(String(255), nullable=False)
     total_points = Column(Integer, default=0, nullable=False)
-    
+
     predictions = relationship("Prediction", back_populates="user")
+
+    groups = relationship("Group", secondary="group_members", back_populates="members")

@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import users, matches, predictions, dashboard, statistics, news
+from .routers import users, matches, predictions, dashboard, statistics, news, groups
 from .database.connection import Base, engine
 from .services.scheduler_service import start_scheduler
 from .models.user import User
@@ -32,6 +32,7 @@ app.include_router(predictions.router)
 app.include_router(dashboard.router)
 app.include_router(statistics.router)
 app.include_router(news.router)
+app.include_router(groups.router)
 
 @app.get("/")
 def read_root():
