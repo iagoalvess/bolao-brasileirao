@@ -43,40 +43,37 @@ const MatchesTable: React.FC<MatchesTableProps> = ({
   getPredictionForMatch,
 }) => {
   return (
-    <Card className="shadow-2xl border-2 border-soccer-yellow bg-white/95 rounded-2xl mt-6">
-      <CardHeader className="flex items-center gap-3">
-        <CalendarCheck className="text-soccer-green" size={28} />
-        <CardTitle className="text-2xl font-semibold text-soccer-black drop-shadow-sm">
+    <Card className="bg-soccer-black/70 backdrop-blur-md border border-white/10 shadow-xl rounded-2xl mt-6">
+      <CardHeader className="flex items-center gap-3 pb-2 border-b border-white/10">
+        <CalendarCheck className="text-soccer-yellow" size={28} />
+        <CardTitle className="text-2xl font-semibold text-white drop-shadow">
           Partidas da Rodada
         </CardTitle>
       </CardHeader>
-      <CardContent className="p-6">
+
+      <CardContent className="p-0">
         {isLoading ? (
-          <div className="text-center py-6 text-lg text-gray-600">
+          <div className="text-center py-6 text-lg text-white/70">
             Carregando partidas...
           </div>
         ) : error ? (
-          <div className="text-center text-red-600 py-6 text-lg">
+          <div className="text-center text-red-500 py-6 text-lg">
             {error?.response?.data?.detail || "Erro ao carregar partidas."}
           </div>
         ) : Array.isArray(matches) && matches.length > 0 ? (
-          <Table className="rounded-xl overflow-hidden">
+          <Table className="rounded-b-2xl overflow-hidden text-white">
             <TableHeader>
-              <TableRow className="bg-gradient-to-r from-soccer-yellow to-soccer-green text-white font-bold">
-                <TableHead className="px-4 py-3 text-white">Horário</TableHead>
-                <TableHead className="px-4 py-3 text-white">Casa</TableHead>
-                <TableHead className="px-4 py-3 text-white">Fora</TableHead>
-                <TableHead className="px-4 py-3 text-white">
-                  Resultado
-                </TableHead>
-                <TableHead className="px-4 py-3 text-white">
-                  Palpite
-                </TableHead>
-                <TableHead className="px-4 py-3 text-white">Situação</TableHead>
+              <TableRow className="bg-gradient-to-r from-soccer-yellow to-soccer-green font-bold">
+                <TableHead className="px-4 py-3 text-white text-center">Horário</TableHead>
+                <TableHead className="px-4 py-3 text-white text-left">Casa</TableHead>
+                <TableHead className="px-4 py-3 text-white text-left">Fora</TableHead>
+                <TableHead className="px-4 py-3 text-white text-center">Resultado</TableHead>
+                <TableHead className="px-4 py-3 text-white text-left">Palpite</TableHead>
+                <TableHead className="px-4 py-3 text-white text-center">Situação</TableHead>
               </TableRow>
             </TableHeader>
 
-            <TableBody>
+            <TableBody className="bg-soccer-black/50">
               {matches.map((match) => (
                 <MatchRow
                   key={match.id}
@@ -92,7 +89,7 @@ const MatchesTable: React.FC<MatchesTableProps> = ({
             </TableBody>
           </Table>
         ) : (
-          <div className="text-center py-6 text-lg text-gray-600">
+          <div className="text-center py-6 text-lg text-white/70">
             Nenhuma partida para essa rodada.
           </div>
         )}

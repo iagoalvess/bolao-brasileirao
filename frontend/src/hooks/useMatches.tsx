@@ -33,19 +33,28 @@ export const useMatches = () => {
   });
 
   useEffect(() => {
-    const mapped = myPredictions.reduce((acc, p) => {
-      acc[p.match_id] = {
-        home_team_score: String(p.home_team_score),
-        away_team_score: String(p.away_team_score),
+    if (!matches.length) return;
+
+    const initialPredictions = matches.reduce((acc, match) => {
+      acc[match.id] = {
+        home_team_score: "0",
+        away_team_score: "0",
       };
       return acc;
     }, {} as typeof predictions);
 
-    const isEqual = JSON.stringify(predictions) === JSON.stringify(mapped);
-    if (!isEqual) {
-      setPredictions(mapped);
+    const mergedPredictions = myPredictions.reduce((acc, prediction) => {
+      acc[prediction.match_id] = {
+        home_team_score: String(prediction.home_team_score ?? 0),
+        away_team_score: String(prediction.away_team_score ?? 0),
+      };
+      return acc;
+    }, initialPredictions);
+
+    if (!isEqual(predictions, mergedPredictions)) {
+      setPredictions(mergedPredictions);
     }
-  }, [myPredictions]);
+  }, [myPredictions, matches]);
 
   const mutation = useMutation({
     mutationFn: predictionService.createPrediction,
@@ -76,8 +85,8 @@ export const useMatches = () => {
     setPredictions((prev) => ({
       ...prev,
       [matchId]: {
-        ...prev[matchId],
-        [field]: value.replace(/[^0-9]/g, ""),
+        ...(prev[matchId] || { home_team_score: "", away_team_score: "" }),
+        [field]: value,
       },
     }));
   };
@@ -99,7 +108,7 @@ export const useMatches = () => {
     }
 
     const input = predictions[match.id];
-    if (!input?.home_team_score || !input.away_team_score) {
+    if (!input.home_team_score.trim() || !input.away_team_score.trim()) {
       toast({
         title: "Dados incompletos",
         description: "Preencha o placar dos dois times.",
@@ -129,3 +138,16 @@ export const useMatches = () => {
     mutation,
   };
 };
+
+function isEqual(
+  predictions: Record<
+    number,
+    { home_team_score: string; away_team_score: string }
+  >,
+  mergedPredictions: Record<
+    number,
+    { home_team_score: string; away_team_score: string }
+  >
+): boolean {
+  return JSON.stringify(predictions) === JSON.stringify(mergedPredictions);
+}

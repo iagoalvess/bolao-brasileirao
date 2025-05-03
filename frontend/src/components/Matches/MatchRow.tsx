@@ -45,10 +45,10 @@ const MatchRow: React.FC<MatchRowProps> = ({
   };
 
   return (
-    <TableRow>
-      <TableCell className="min-w-[200px] w-[220px]">
+    <TableRow className="hover:bg-white/5 transition-colors">
+      <TableCell className="text-white/90 text-sm whitespace-nowrap text-center">
         {new Date(match.match_date).toLocaleString("pt-BR", {
-          weekday: "long",
+          weekday: "short",
           day: "2-digit",
           month: "2-digit",
           hour: "2-digit",
@@ -56,52 +56,52 @@ const MatchRow: React.FC<MatchRowProps> = ({
         })}
       </TableCell>
 
-      <TableCell className="min-w-[200px] w-[220px]">
+      <TableCell className="text-white/90 text-sm">
         <div className="flex items-center gap-2">
           {renderTeamLogo(match.home_team)}
-          <span>{match.home_team}</span>
+          <span className="truncate">{match.home_team}</span>
         </div>
       </TableCell>
 
-      <TableCell className="min-w-[200px] w-[220px]">
+      <TableCell className="text-white/90 text-sm">
         <div className="flex items-center gap-2">
           {renderTeamLogo(match.away_team)}
-          <span>{match.away_team}</span>
+          <span className="truncate">{match.away_team}</span>
         </div>
       </TableCell>
 
-      <TableCell>
+      <TableCell className="text-white text-center font-medium">
         {isFinished ? (
-          <div className="font-semibold">
+          <span className="text-green-400">
             {match.home_score} x {match.away_score}
-          </div>
+          </span>
         ) : (
-          <span className="text-xs text-gray-500 italic">Aguardando</span>
+          <span className="text-xs italic text-white/60">Aguardando</span>
         )}
       </TableCell>
 
-      <TableCell>
+      <TableCell className="text-white text-left">
         {isFinished ? (
           savedPrediction ? (
-            <div className="text-sm text-gray-800">
+            <span className="text-sm text-white/80">
               {savedPrediction.home_team_score} x{" "}
               {savedPrediction.away_team_score}
-            </div>
+            </span>
           ) : (
-            <span className="text-xs text-gray-500 italic">Sem palpite</span>
+            <span className="text-sm italic text-white/50">Sem palpite</span>
           )
         ) : (
           <MatchScoreInput
             disabled={predicted || isPending}
             homeValue={
               predicted
-                ? String(savedPrediction?.home_team_score ?? "")
-                : predictionInput?.home_team_score || ""
+                ? savedPrediction?.home_team_score || 0
+                : Number(predictionInput?.home_team_score) || 0
             }
             awayValue={
               predicted
-                ? String(savedPrediction?.away_team_score ?? "")
-                : String(predictionInput?.away_team_score ?? "")
+                ? savedPrediction?.away_team_score || 0
+                : Number(predictionInput?.away_team_score) || 0
             }
             onChangeHome={(value) =>
               onChange(match.id, "home_team_score", value)
@@ -113,17 +113,21 @@ const MatchRow: React.FC<MatchRowProps> = ({
         )}
       </TableCell>
 
-      <TableCell>
+      <TableCell className="text-center">
         {!isFinished ? (
           <Button
             onClick={onPalpite}
             disabled={predicted || isPending}
-            className="bg-soccer-blue text-white"
+            className={`text-white px-3 py-1 text-sm font-medium ${
+              predicted
+                ? "bg-soccer-blue/20 cursor-default"
+                : "bg-soccer-blue hover:bg-soccer-blue/80"
+            }`}
           >
             {predicted ? "Palpite enviado" : "Palpitar"}
           </Button>
         ) : (
-          <span className="ml-2 text-xs text-gray-500">Finalizado</span>
+          <span className="text-xs text-white/50 italic">Finalizado</span>
         )}
       </TableCell>
     </TableRow>

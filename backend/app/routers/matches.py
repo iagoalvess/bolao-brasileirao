@@ -15,7 +15,9 @@ async def sync_all_matches(db: Session = Depends(get_db)):
     try:
         MatchService.sync_all_matches_from_api(db)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Erro ao sincronizar partidas: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Erro ao sincronizar partidas: {str(e)}"
+        )
 
     return {"detail": "Sincronização concluída com sucesso."}
 
@@ -39,3 +41,15 @@ async def get_all_matches(db: Session = Depends(get_db)):
             status_code=404, detail="Nenhuma partida encontrada no banco de dados"
         )
     return matches
+
+
+@router.get("/next", response_model=MatchResponse)
+async def get_next_match(db: Session = Depends(get_db)):
+    next_match = MatchService.get_next_match(db)
+
+    if not next_match:
+        raise HTTPException(
+            status_code=404, detail="Nenhuma próxima partida encontrada."
+        )
+
+    return next_match

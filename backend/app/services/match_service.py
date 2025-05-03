@@ -1,5 +1,6 @@
 import requests
 from sqlalchemy.orm import Session
+from sqlalchemy import asc
 from datetime import datetime
 
 from ..services.scoring_service import ScoringService
@@ -79,3 +80,20 @@ class MatchService:
         db.commit()
 
         ScoringService.update_all_predictions(db)
+
+    @staticmethod
+    def get_next_match(db: Session) -> Match:
+        placeholder_date = datetime(1900, 1, 1)
+
+        next_match = (
+            db.query(Match)
+            .filter(
+                Match.status != "FINISHED",
+                Match.match_date != placeholder_date,
+                Match.match_date >= datetime.now(),
+            )
+            .order_by(asc(Match.match_date))
+            .first()
+        )
+
+        return next_match

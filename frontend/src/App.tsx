@@ -8,6 +8,7 @@ import HomePage from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import Matches from "./pages/Matches";
 import Ranking from "./pages/Ranking";
+import Stats from "./pages/Perfomance";
 import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -44,6 +45,14 @@ const App = () => (
             element={
               <ProtectedRoute>
                 <Matches />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/performance"
+            element={
+              <ProtectedRoute>
+                <Stats />
               </ProtectedRoute>
             }
           />

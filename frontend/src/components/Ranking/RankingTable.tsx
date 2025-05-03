@@ -16,43 +16,55 @@ interface RankingTableProps {
 const getPositionStyle = (index: number) => {
   switch (index) {
     case 0:
-      return "text-yellow-500";
+      return "text-soccer-yellow bg-yellow-900/20";
     case 1:
-      return "text-gray-400";
+      return "text-gray-300 bg-gray-800/20";
     case 2:
-      return "text-orange-500";
+      return "text-orange-400 bg-orange-900/20";
     default:
-      return "text-gray-700";
+      return "text-gray-300";
   }
 };
 
 const RankingTable = ({ ranking }: RankingTableProps) => (
-  <Table className="min-w-full bg-white rounded-2xl shadow-lg text-gray-800 overflow-hidden">
+  <Table className="min-w-full bg-transparent">
     <TableHeader>
-      <TableRow className="bg-gradient-to-r from-soccer-yellow to-soccer-green">
-        <TableHead className="px-6 py-4 text-white text-lg">Posição</TableHead>
-        <TableHead className="px-6 py-4 text-white text-lg">Usuário</TableHead>
-        <TableHead className="px-6 py-4 text-white text-lg">Pontos</TableHead>
+      <TableRow className="bg-gradient-to-r from-soccer-green to-soccer-yellow">
+        <TableHead className="px-6 py-5 text-white text-lg font-bold text-shadow-sm">
+          Posição
+        </TableHead>
+        <TableHead className="px-6 py-5 text-white text-lg font-bold text-shadow-sm">
+          Usuário
+        </TableHead>
+        <TableHead className="px-6 py-5 text-white text-lg font-bold text-shadow-sm">
+          Pontos
+        </TableHead>
       </TableRow>
     </TableHeader>
     <TableBody>
       {ranking.map((user, idx) => (
         <TableRow
           key={user.id}
-          className="hover:bg-soccer-green/10 transition-colors duration-200"
+          className={`border-b border-soccer-yellow/10 ${getPositionStyle(
+            idx
+          )} hover:bg-white/5 transition-all`}
         >
-          <TableCell
-            className={`px-6 py-4 font-bold flex items-center gap-2 ${getPositionStyle(
-              idx
-            )}`}
-          >
-            {idx < 3 && <Medal size={20} className={getPositionStyle(idx)} />}
-            {idx + 1}º
+          <TableCell className="px-6 py-4 font-bold flex items-center gap-2">
+            <div className="flex items-center gap-3">
+              {idx < 3 && (
+                <Medal
+                  size={24}
+                  className="drop-shadow-[0_2px_2px_rgba(0,0,0,0.3)]"
+                  strokeWidth={2.5}
+                />
+              )}
+              <span className="text-xl font-black">{idx + 1}º</span>
+            </div>
           </TableCell>
-          <TableCell className="px-6 py-4 text-lg font-medium">
+          <TableCell className="px-6 py-4 text-lg font-medium text-gray-100">
             {user.username}
           </TableCell>
-          <TableCell className="px-6 py-4 text-lg">
+          <TableCell className="px-6 py-4 text-lg font-bold text-soccer-yellow">
             {user.total_points}
           </TableCell>
         </TableRow>

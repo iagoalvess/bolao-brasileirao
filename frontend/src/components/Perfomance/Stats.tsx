@@ -1,24 +1,24 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
-import { dashboardService } from "@/services/dashboardService";
+import { statsService } from "@/services/statsService";
 import { FaTrophy, FaClock, FaUserAlt } from "react-icons/fa";
 
-const HomeDashboard = () => {
+const Stats = () => {
   const { user } = useAuth();
   const [summary, setSummary] = useState(null);
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    const fetchDashboardData = async () => {
+    const fetchUserStats = async () => {
       try {
         if (!user || !user.id) {
           console.warn("User ainda não disponível, aguardando...");
           return;
         }
 
-        const summaryRes = await dashboardService.getSummary();
-        const userRes = await dashboardService.getUserSummary(Number(user.id));
+        const summaryRes = await statsService.getSummary();
+        const userRes = await statsService.getUserSummary(Number(user.id));
         setSummary(summaryRes);
         setUserData(userRes);
       } catch (error) {
@@ -26,7 +26,7 @@ const HomeDashboard = () => {
       }
     };
 
-    fetchDashboardData();
+    fetchUserStats();
   }, [user]);
 
   if (!summary || !userData) {
@@ -107,4 +107,4 @@ const HomeDashboard = () => {
   );
 };
 
-export default HomeDashboard;
+export default Stats;

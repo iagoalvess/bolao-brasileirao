@@ -23,4 +23,9 @@ export const predictionService = {
   const res = await api.get(`/predictions/by-round?round=${round}`);
   return res.data;
  },
+
+ getMyPredictions: async (): Promise<Prediction[]> => {
+  const res = await api.get("/predictions/me");
+  return res.data;
+ },
 };

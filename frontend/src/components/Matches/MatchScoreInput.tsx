@@ -1,6 +1,6 @@
 interface Props {
-  homeValue: string;
-  awayValue: string;
+  homeValue: number;
+  awayValue: number;
   onChangeHome: (val: string) => void;
   onChangeAway: (val: string) => void;
   disabled?: boolean;
@@ -13,26 +13,37 @@ const MatchScoreInput: React.FC<Props> = ({
   onChangeAway,
   disabled,
 }) => {
+  const handleHomeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\D/g, "").slice(0, 2);
+    onChangeHome(value && !isNaN(Number(value)) ? parseInt(value, 10).toString() : "0");
+  };
+  
+  const handleAwayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\D/g, "").slice(0, 2);
+    onChangeAway(value && !isNaN(Number(value)) ? parseInt(value, 10).toString() : "0");
+  };
+  
+
   return (
-    <div className="flex gap-1 items-center">
+    <div className="flex gap-2 items-center">
       <input
-        type="text"
+        type="integer"
         inputMode="numeric"
         value={homeValue}
-        onChange={(e) => onChangeHome(e.target.value.replace(/[^0-9]/g, ""))}
-        className="w-10 rounded-md border border-gray-300 text-center"
-        maxLength={2}
+        onChange={handleHomeChange}
+        className="w-12 h-10 rounded-md border border-gray-300 text-center bg-transparent text-white focus:ring-2 focus:ring-soccer-yellow focus:border-transparent"
         disabled={disabled}
+        maxLength={2}
       />
-      <span className="mx-1 font-bold">x</span>
+      <span className="mx-1 font-bold text-white">x</span>
       <input
-        type="text"
+        type="integer"
         inputMode="numeric"
         value={awayValue}
-        onChange={(e) => onChangeAway(e.target.value.replace(/[^0-9]/g, ""))}
-        className="w-10 rounded-md border border-gray-300 text-center"
-        maxLength={2}
+        onChange={handleAwayChange}
+        className="w-12 h-10 rounded-md border border-gray-300 text-center bg-transparent text-white focus:ring-2 focus:ring-soccer-yellow focus:border-transparent"
         disabled={disabled}
+        maxLength={2}
       />
     </div>
   );

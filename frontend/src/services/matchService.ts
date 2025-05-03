@@ -26,4 +26,8 @@ export const matchService = {
     const res = await api.get(`/matches/round/${round}`);
     return res.data;
   },
+  getNextMatch: async (): Promise<Match> => {
+    const res = await api.get("/matches/next");
+    return res.data;
+  },
 };

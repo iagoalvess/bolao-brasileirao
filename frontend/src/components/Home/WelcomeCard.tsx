@@ -1,24 +1,60 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useEffect, useState } from "react";
 import { FaFutbol } from "react-icons/fa";
+import { matchService, Match } from "@/services/matchService";
 
-const WelcomeCard = () => (
-  <div className="relative overflow-hidden bg-soccer-black/50 rounded-2xl p-6 md:p-8 border-2 border-soccer-yellow/30 shadow-xl">
-    <div className="flex flex-col md:flex-row items-center gap-6">
-      <div className="p-4 bg-soccer-yellow/20 rounded-full animate-pulse">
-        <FaFutbol size={40} className="text-soccer-yellow" />
-      </div>
+const WelcomeCard = () => {
+  const [nextMatch, setNextMatch] = useState<Match | null>(null);
 
-      <div className="text-center md:text-left">
-        <h1 className="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-soccer-yellow to-soccer-green">
-          Bem-vindo ao Bolão!
-        </h1>
-        <p className="mt-2 text-white/80 leading-relaxed max-w-2xl">
-          O ponto de encontro dos verdadeiros apaixonados por futebol! Palpite
-          no Brasileirão, acompanhe resultados e dispute a liderança do ranking.
-        </p>
+  useEffect(() => {
+    const fetchNextMatch = async () => {
+      try {
+        const match = await matchService.getNextMatch();
+        setNextMatch(match);
+      } catch (error) {
+        console.error("Erro ao buscar próxima partida:", error);
+      }
+    };
+
+    fetchNextMatch();
+  }, []);
+
+  return (
+    <div className="relative overflow-hidden rounded-2xl p-8 border border-white/10 shadow-xl bg-[url('/stadium-pattern.svg')] bg-cover">
+      <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-soccer-green/20 backdrop-blur-sm" />
+      <div className="relative z-10 flex flex-col md:flex-row items-center gap-6">
+        <div className="p-4 bg-soccer-yellow/30 rounded-2xl shadow-lg animate-float">
+          <FaFutbol size={48} className="text-soccer-yellow" />
+        </div>
+
+        <div className="text-center md:text-left flex-1">
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            Bem-vindo ao{" "}
+            <span className="text-soccer-yellow">Bolão do Futebol</span>
+          </h1>
+          <div className="max-w-2xl mx-auto md:mx-0">
+            <p className="text-lg text-white/90 leading-relaxed">
+              Junte-se à comunidade mais animada do futebol brasileiro!
+              <span className="block mt-2 text-soccer-yellow font-semibold">
+                Próximo jogo:{" "}
+                {nextMatch
+                  ? `${nextMatch.home_team} vs. ${
+                      nextMatch.away_team
+                    } - ${new Date(
+                      nextMatch.match_date
+                    ).toLocaleDateString()} ${new Date(
+                      nextMatch.match_date
+                    ).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}`
+                  : "Carregando..."}
+              </span>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default WelcomeCard;

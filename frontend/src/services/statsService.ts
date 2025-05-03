@@ -6,13 +6,13 @@ export interface TopScorer {
  points: number;
 }
 
-export interface DashboardSummary {
+export interface StatsSummanry {
  current_round: number;
  total_predictions: number;
  top_scorer: TopScorer;
 }
 
-export interface UserDashboard {
+export interface UserStats {
  user_id: number;
  username: string;
  total_points: number;
@@ -20,13 +20,13 @@ export interface UserDashboard {
  has_pending_predictions: boolean;
 }
 
-export const dashboardService = {
- getSummary: async (): Promise<DashboardSummary> => {
+export const statsService = {
+ getSummary: async (): Promise<StatsSummanry> => {
   const res = await api.get("/dashboard/summary");
   return res.data;
  },
 
- getUserSummary: async (userId: number): Promise<UserDashboard> => {
+ getUserSummary: async (userId: number): Promise<UserStats> => {
   const res = await api.get(`/dashboard/user/${userId}`);
   return res.data;
  },
