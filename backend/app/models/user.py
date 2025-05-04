@@ -14,4 +14,9 @@ class User(Base):
 
     predictions = relationship("Prediction", back_populates="user")
 
-    groups = relationship("Group", secondary="group_members", back_populates="members")
+    group_members = relationship(
+        "GroupMember", back_populates="user", cascade="all, delete-orphan"
+    )
+    groups = relationship(
+        "Group", secondary="group_members", back_populates="members", viewonly=True
+    )

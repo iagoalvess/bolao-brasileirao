@@ -1,28 +1,34 @@
 from sqlalchemy.orm import Session
-from ..models.group import Group
-from ..models.user import User
 from fastapi import HTTPException
+from ..models.group import Group
+from ..models.group_member import GroupMember
+from ..models.user import User
 from ..schemas.group import GroupResponse
 
 
 class GroupService:
     @staticmethod
     def create_group(db: Session, name: str, current_user: User) -> GroupResponse:
+        user_group = (
+            db.query(GroupMember).filter(GroupMember.user_id == current_user.id).first()
+        )
+        if user_group:
+            raise HTTPException(status_code=400, detail="Usuário já está em um grupo")
+
         group = Group(name=name)
         db.add(group)
         db.commit()
         db.refresh(group)
 
-        group.members.append(current_user)
+        membership = GroupMember(user_id=current_user.id, group_id=group.id)
+        db.add(membership)
         db.commit()
-        db.refresh(group)
-        
-        group_response = GroupResponse(
-            id=group.id,
-            name=group.name,
-            members_count=len(group.members),
+
+        members_count = (
+            db.query(GroupMember).filter(GroupMember.group_id == group.id).count()
         )
-        return group_response
+
+        return GroupResponse(id=group.id, name=group.name, members_count=members_count)
 
     @staticmethod
     def get_all_groups(db: Session):
@@ -32,7 +38,9 @@ class GroupService:
             GroupResponse(
                 id=group.id,
                 name=group.name,
-                members_count=len(group.members),
+                members_count=db.query(GroupMember)
+                .filter(GroupMember.group_id == group.id)
+                .count(),
             )
             for group in groups
         ]
@@ -43,12 +51,16 @@ class GroupService:
         if not group:
             raise HTTPException(status_code=404, detail="Grupo não encontrado")
 
-        return GroupResponse(
-            id=group.id, name=group.name, members_count=len(group.members)
+        members_count = (
+            db.query(GroupMember).filter(GroupMember.group_id == group.id).count()
         )
 
+        return GroupResponse(id=group.id, name=group.name, members_count=members_count)
+
     @staticmethod
-    def add_member_to_group(db: Session, group_id: int, user_id: int) -> GroupResponse:
+    def add_member_to_group(
+        db: Session, group_id: int, current_user: User
+    ) -> GroupResponse:
         group = db.query(Group).filter(Group.id == group_id).first()
         if not group:
             raise HTTPException(status_code=404, detail="Grupo não encontrado")
@@ -56,14 +68,18 @@ class GroupService:
         if len(group.members) >= group.max_users:
             raise HTTPException(status_code=400, detail="Grupo cheio")
 
-        user = db.query(User).filter(User.id == user_id).first()
-        if not user:
-            raise HTTPException(status_code=404, detail="Usuário não encontrado")
+        already_member = (
+            db.query(GroupMember)
+            .filter(
+                GroupMember.group_id == group_id, GroupMember.user_id == current_user.id
+            )
+            .first()
+        )
+        if already_member:
+            raise HTTPException(status_code=400, detail="Usuário já está neste grupo")
 
-        if user in group.members:
-            raise HTTPException(status_code=400, detail="Usuário já é membro do grupo")
-
-        group.members.append(user)
+        new_member = GroupMember(group_id=group_id, user_id=current_user.id)
+        db.add(new_member)
         db.commit()
         db.refresh(group)
 
@@ -73,21 +89,27 @@ class GroupService:
 
     @staticmethod
     def remove_member_from_group(
-        db: Session, group_id: int, user_id: int
+        db: Session, group_id: int, current_user: User
     ) -> GroupResponse:
         group = db.query(Group).filter(Group.id == group_id).first()
+
         if not group:
             raise HTTPException(status_code=404, detail="Grupo não encontrado")
 
-        user = db.query(User).filter(User.id == user_id).first()
-        if not user:
-            raise HTTPException(status_code=404, detail="Usuário não encontrado")
+        group_member = (
+            db.query(GroupMember)
+            .filter(
+                GroupMember.group_id == group_id, GroupMember.user_id == current_user.id
+            )
+            .first()
+        )
 
-        if user not in group.members:
-            raise HTTPException(status_code=400, detail="Usuário não é membro do grupo")
+        if not group_member:
+            raise HTTPException(status_code=400, detail="Você não está neste grupo")
 
-        group.members.remove(user)
+        db.delete(group_member)
         db.commit()
+
         db.refresh(group)
 
         return GroupResponse(
@@ -100,5 +122,7 @@ class GroupService:
         if not group:
             raise HTTPException(status_code=404, detail="Grupo não encontrado")
 
-        member_ids = [user.id for user in group.members]
-        return member_ids
+        member_ids = (
+            db.query(GroupMember.user_id).filter(GroupMember.group_id == group_id).all()
+        )
+        return [id for (id,) in member_ids]
