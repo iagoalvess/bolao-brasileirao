@@ -27,7 +27,11 @@ const MatchRow: React.FC<MatchRowProps> = ({
   onChange,
   onPalpite,
 }) => {
+  const now = new Date();
+  const matchDate = new Date(match.match_date);
+  const hasStarted = matchDate <= now;
   const isFinished = match.status === "FINISHED";
+  const isUnavailable = isFinished || hasStarted;
 
   const renderTeamLogo = (team: string) => {
     const formattedTeamName = team
@@ -47,7 +51,7 @@ const MatchRow: React.FC<MatchRowProps> = ({
   return (
     <TableRow className="hover:bg-white/5 transition-colors">
       <TableCell className="text-white/90 text-sm whitespace-nowrap text-center">
-        {new Date(match.match_date).toLocaleString("pt-BR", {
+        {matchDate.toLocaleString("pt-BR", {
           weekday: "short",
           day: "2-digit",
           month: "2-digit",
@@ -81,7 +85,7 @@ const MatchRow: React.FC<MatchRowProps> = ({
       </TableCell>
 
       <TableCell className="text-white text-left">
-        {isFinished ? (
+        {isUnavailable ? (
           savedPrediction ? (
             <span className="text-sm text-white/80">
               {savedPrediction.home_team_score} x{" "}
@@ -92,7 +96,7 @@ const MatchRow: React.FC<MatchRowProps> = ({
           )
         ) : (
           <MatchScoreInput
-            disabled={predicted || isPending}
+            disabled={predicted || isPending || isUnavailable}
             homeValue={
               predicted
                 ? savedPrediction?.home_team_score || 0
@@ -114,7 +118,7 @@ const MatchRow: React.FC<MatchRowProps> = ({
       </TableCell>
 
       <TableCell className="text-center">
-        {!isFinished ? (
+        {!isUnavailable ? (
           <Button
             onClick={onPalpite}
             disabled={predicted || isPending}
@@ -127,7 +131,9 @@ const MatchRow: React.FC<MatchRowProps> = ({
             {predicted ? "Palpite enviado" : "Palpitar"}
           </Button>
         ) : (
-          <span className="text-xs text-white/50 italic">Finalizado</span>
+          <span className="text-xs text-white/50 italic">
+            {isFinished ? "Finalizado" : "Em andamento"}
+          </span>
         )}
       </TableCell>
     </TableRow>

@@ -44,4 +44,8 @@ export const authService = {
     return response.data;
   },
 
+  getUserById: async (userId: number): Promise<User> => {
+    const res = await api.get(`/users/${userId}`);
+    return res.data;
+  },
 };

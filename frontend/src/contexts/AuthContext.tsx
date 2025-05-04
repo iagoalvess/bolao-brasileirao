@@ -9,7 +9,7 @@ import { authService } from "@/services/userService";
 import { useNavigate } from "react-router-dom";
 
 interface User {
-  id: string;
+  id: number;
   username: string;
   email: string;
 }

@@ -126,3 +126,12 @@ class GroupService:
             db.query(GroupMember.user_id).filter(GroupMember.group_id == group_id).all()
         )
         return [id for (id,) in member_ids]
+
+    @staticmethod
+    def get_user_group(db: Session, user_id: int) -> Group | None:
+        return (
+            db.query(Group)
+            .join(GroupMember)
+            .filter(GroupMember.user_id == user_id)
+            .first()
+        )

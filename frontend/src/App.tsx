@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import Matches from "./pages/Matches";
 import Ranking from "./pages/Ranking";
 import Stats from "./pages/Perfomance";
+import Groups from "./pages/Groups";
 import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -53,6 +54,14 @@ const App = () => (
             element={
               <ProtectedRoute>
                 <Stats />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/group"
+            element={
+              <ProtectedRoute>
+                <Groups />
               </ProtectedRoute>
             }
           />

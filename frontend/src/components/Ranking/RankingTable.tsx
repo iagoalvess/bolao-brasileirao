@@ -7,7 +7,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { User } from "@/services/userService";
-import { Medal } from "lucide-react";
+import { Loader2, Medal } from "lucide-react";
+import { useGroups } from "@/hooks/useGroups";
+import { useEffect } from "react";
 
 interface RankingTableProps {
   ranking: User[];
@@ -26,51 +28,89 @@ const getPositionStyle = (index: number) => {
   }
 };
 
-const RankingTable = ({ ranking }: RankingTableProps) => (
-  <Table className="min-w-full bg-transparent">
-    <TableHeader>
-      <TableRow className="bg-gradient-to-r from-soccer-green to-soccer-yellow">
-        <TableHead className="px-6 py-5 text-white text-lg font-bold text-shadow-sm">
-          Posição
-        </TableHead>
-        <TableHead className="px-6 py-5 text-white text-lg font-bold text-shadow-sm">
-          Usuário
-        </TableHead>
-        <TableHead className="px-6 py-5 text-white text-lg font-bold text-shadow-sm">
-          Pontos
-        </TableHead>
-      </TableRow>
-    </TableHeader>
-    <TableBody>
-      {ranking.map((user, idx) => (
-        <TableRow
-          key={user.id}
-          className={`border-b border-soccer-yellow/10 ${getPositionStyle(
-            idx
-          )} hover:bg-white/5 transition-all`}
-        >
-          <TableCell className="px-6 py-4 font-bold flex items-center gap-2">
-            <div className="flex items-center gap-3">
-              {idx < 3 && (
-                <Medal
-                  size={24}
-                  className="drop-shadow-[0_2px_2px_rgba(0,0,0,0.3)]"
-                  strokeWidth={2.5}
-                />
-              )}
-              <span className="text-xl font-black">{idx + 1}º</span>
-            </div>
-          </TableCell>
-          <TableCell className="px-6 py-4 text-lg font-medium text-gray-100">
-            {user.username}
-          </TableCell>
-          <TableCell className="px-6 py-4 text-lg font-bold text-soccer-yellow">
-            {user.total_points}
-          </TableCell>
-        </TableRow>
-      ))}
-    </TableBody>
-  </Table>
-);
+const RankingTable = ({ ranking }: RankingTableProps) => {
+  const { currentGroup, refetchMyGroup, isMyGroupFetching } = useGroups();
+
+  useEffect(() => {
+    refetchMyGroup();
+  }, []);
+
+  if (isMyGroupFetching) {
+    return (
+      <div className="flex flex-col items-center justify-center bg-white/10 backdrop-blur-md rounded-lg p-4 text-center shadow-md">
+        <Loader2 className="h-5 w-5 text-white animate-spin mb-2" />
+        <span className="text-white text-sm font-medium">
+          Carregando pontuação do grupo...
+        </span>
+      </div>
+    );
+  }
+
+  if (!currentGroup) {
+    return (
+      <div className="text-center mt-10 bg-white/20 rounded-xl p-8 text-white text-lg shadow-lg">
+        <p className="mb-4 font-semibold">
+          Você não está em nenhum grupo no momento.
+        </p>
+        <p className="text-sm text-white/70">
+          Entre em um grupo para visualizar o ranking dos seus colegas.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-6">
+      <h2 className="text-2xl font-bold text-white mb-4 text-center">
+        Ranking do grupo{" "}
+        <span className="text-soccer-yellow">{currentGroup.name}</span>
+      </h2>
+      <Table className="min-w-full bg-transparent">
+        <TableHeader>
+          <TableRow className="bg-gradient-to-r from-soccer-green to-soccer-yellow">
+            <TableHead className="px-6 py-5 text-white text-lg font-bold text-shadow-sm">
+              Posição
+            </TableHead>
+            <TableHead className="px-6 py-5 text-white text-lg font-bold text-shadow-sm">
+              Usuário
+            </TableHead>
+            <TableHead className="px-6 py-5 text-white text-lg font-bold text-shadow-sm">
+              Pontos
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {ranking.map((user, idx) => (
+            <TableRow
+              key={user.id}
+              className={`border-b border-soccer-yellow/10 ${getPositionStyle(
+                idx
+              )} hover:bg-white/5 transition-all`}
+            >
+              <TableCell className="px-6 py-4 font-bold flex items-center gap-2">
+                <div className="flex items-center gap-3">
+                  {idx < 3 && (
+                    <Medal
+                      size={24}
+                      className="drop-shadow-[0_2px_2px_rgba(0,0,0,0.3)]"
+                      strokeWidth={2.5}
+                    />
+                  )}
+                  <span className="text-xl font-black">{idx + 1}º</span>
+                </div>
+              </TableCell>
+              <TableCell className="px-6 py-4 text-lg font-medium text-gray-100">
+                {user.username}
+              </TableCell>
+              <TableCell className="px-6 py-4 text-lg font-bold text-soccer-yellow">
+                {user.total_points}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
+};
 
 export default RankingTable;
