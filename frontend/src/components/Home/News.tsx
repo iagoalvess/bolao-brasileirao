@@ -50,6 +50,8 @@ const NewsDashboard = () => {
           <a
             key={item.link}
             href={item.link}
+            target="_blank"
+            rel="noopener noreferrer"
             className="group block rounded-xl bg-soccer-black/60 hover:bg-soccer-green/5 transition-all p-5 border border-white/10 hover:border-soccer-yellow/30"
           >
             <div className="flex items-start gap-4">
