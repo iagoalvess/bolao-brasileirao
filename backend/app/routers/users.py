@@ -1,9 +1,13 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Body, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from typing import List
 
-from ..services.auth_service import get_current_user
+from ..services.auth_service import (
+    get_current_user,
+    create_refresh_token,
+    verify_refresh_token_and_get_user,
+)
 
 from ..database.connection import get_db
 from ..models.user import User
@@ -36,7 +40,12 @@ async def login(
 ):
     user = authenticate_user(form_data.username, form_data.password, db)
     access_token = create_access_token_for_user(user)
-    return {"access_token": access_token, "token_type": "bearer"}
+    refresh_token = create_refresh_token(data={"sub": str(user.id)})
+    return {
+        "access_token": access_token,
+        "refresh_token": refresh_token,
+        "token_type": "bearer",
+    }
 
 
 @router.get("/me", response_model=UserResponse)
@@ -48,3 +57,10 @@ async def get_me(current_user: User = Depends(get_current_user)):
 async def user_by_id(user_id: int, db: Session = Depends(get_db)):
     user = get_user_by_id(user_id, db)
     return user
+
+
+@router.post("/refresh-token")
+async def refresh_token(token: str = Body(...), db: Session = Depends(get_db)):
+    user = verify_refresh_token_and_get_user(token, db)
+    new_access_token = create_access_token_for_user(user)
+    return {"access_token": new_access_token}

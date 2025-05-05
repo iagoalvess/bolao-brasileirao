@@ -48,27 +48,30 @@ export function AuthProvider({ children }: AuthProviderProps) {
   async function signIn(username: string, password: string) {
     try {
       setLoading(true);
-      const response = await authService.login(username, password);
-  
-      const { access_token } = response;
-      if (!access_token) {
-        throw new Error('Token não recebido');
+      const { access_token, refresh_token } = await authService.login(
+        username,
+        password
+      );
+
+      if (!access_token || !refresh_token) {
+        throw new Error("Tokens não recebidos");
       }
-  
-      localStorage.setItem('@bolao:token', access_token);
-  
+
+      localStorage.setItem("@bolao:token", access_token);
+      localStorage.setItem("@bolao:refresh_token", refresh_token);
+
       const userResponse = await authService.getMe(access_token);
-  
+
       const userData = {
         id: userResponse.id,
         username: userResponse.username,
         email: userResponse.email,
       };
-  
-      localStorage.setItem('@bolao:user', JSON.stringify(userData));
-  
+
+      localStorage.setItem("@bolao:user", JSON.stringify(userData));
+
       setUser(userData);
-      navigate('/home');
+      navigate("/home");
     } catch (error) {
       console.error("Erro ao fazer login:", error);
       throw error;
@@ -76,7 +79,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setLoading(false);
     }
   }
-  
 
   async function signUp(username: string, email: string, password: string) {
     try {

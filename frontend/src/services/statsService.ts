@@ -1,33 +1,20 @@
 import { api } from "./apiService";
 
-export interface TopScorer {
- user_id: number;
- username: string;
- points: number;
+export interface PersonalStats {
+ exact_hits: number;
+ winner_hits: number;
+ errors: number;
+ avg_points_per_round: number;
 }
 
-export interface StatsSummanry {
- current_round: number;
- total_predictions: number;
- top_scorer: TopScorer;
-}
-
-export interface UserStats {
- user_id: number;
- username: string;
- total_points: number;
- current_rank: number;
- has_pending_predictions: boolean;
-}
-
-export const statsService = {
- getSummary: async (): Promise<StatsSummanry> => {
-  const res = await api.get("/dashboard/summary");
+export const statisticsService = {
+ getPersonalStats: async (userId: number): Promise<PersonalStats> => {
+  const res = await api.get(`/statistics/personal/${userId}`);
   return res.data;
  },
 
- getUserSummary: async (userId: number): Promise<UserStats> => {
-  const res = await api.get(`/dashboard/user/${userId}`);
+ getPointsByRound: async (userId: number): Promise<Record<string, number>> => {
+  const res = await api.get(`/statistics/personal/${userId}/points-by-round`);
   return res.data;
  },
 };

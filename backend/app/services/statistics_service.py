@@ -83,3 +83,30 @@ def get_global_statistics(db: Session):
         ),
         "avg_points_per_round": round(avg, 2),
     }
+
+
+def get_points_per_round(db: Session, user_id: int):
+    predictions = (
+        db.query(Prediction)
+        .join(Match)
+        .filter(Prediction.user_id == user_id, Match.status == "FINISHED")
+        .all()
+    )
+
+    points_by_round = {}
+
+    for p in predictions:
+        round_id = p.match.round
+
+        if p.home_score == p.match.home_score and p.away_score == p.match.away_score:
+            points = 5
+        elif (p.home_score - p.away_score) * (
+            p.match.home_score - p.match.away_score
+        ) > 0:
+            points = 3
+        else:
+            points = 0
+
+        points_by_round.setdefault(round_id, []).append(points)
+
+    return {r: sum(pts) for r, pts in points_by_round.items()}
