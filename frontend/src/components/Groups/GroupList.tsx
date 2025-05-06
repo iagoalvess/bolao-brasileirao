@@ -14,30 +14,34 @@ const GroupList: React.FC<GroupListProps> = ({
   onJoin,
   joiningGroupId,
 }) => (
-  <div className="bg-white shadow-md rounded-lg p-6">
-    <h2 className="text-xl font-semibold mb-4">Grupos existentes</h2>
+  <div className="bg-soccer-black/70 backdrop-blur-md border border-white/10 shadow-xl rounded-2xl p-6 text-white">
+    <h2 className="text-xl mb-4 text-soccer-yellow/90 drop-shadow font-bold">
+      Grupos existentes
+    </h2>
     {isLoading ? (
-      <p>Carregando grupos...</p>
+      <p className="text-gray-300">Carregando grupos...</p>
     ) : groups.length === 0 ? (
-      <p>Nenhum grupo disponível.</p>
+      <p className="text-gray-300">Nenhum grupo disponível.</p>
     ) : (
       <ul className="space-y-2">
         {groups.map((group) => (
           <li
             key={group.id}
-            className="flex justify-between items-center border-b pb-2"
+            className="flex justify-between items-center border-b border-white/10 pb-2"
           >
-            <span className="font-medium text-gray-700">{group.name}</span>
+            <span className="text-white font-medium">
+              {group.name}
+            </span>
             <Button
               onClick={() => onJoin(group.id)}
               variant="default"
               size="sm"
-              className="transition-all duration-200 hover:bg-primary/90 active:scale-95 shadow-sm"
+              className="bg-soccer-yellow/80 hover:bg-soccer-yellow/90 text-white shadow-sm transition-all duration-200 active:scale-95"
               disabled={joiningGroupId === group.id}
             >
               {joiningGroupId === group.id ? (
                 <div className="flex items-center gap-2">
-                  <Loader2 className="h-4 w-4 animate-spin text-white" />
+                  <Loader2 className="h-4 w-4 animate-spin text-black" />
                   <span>Entrando...</span>
                 </div>
               ) : (

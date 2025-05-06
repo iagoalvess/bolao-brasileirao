@@ -64,12 +64,27 @@ const MatchesTable: React.FC<MatchesTableProps> = ({
           <Table className="rounded-b-2xl overflow-hidden text-white">
             <TableHeader>
               <TableRow className="bg-gradient-to-r from-soccer-yellow to-soccer-green font-bold">
-                <TableHead className="px-4 py-3 text-white text-center">Horário</TableHead>
-                <TableHead className="px-4 py-3 text-white text-left">Casa</TableHead>
-                <TableHead className="px-4 py-3 text-white text-left">Fora</TableHead>
-                <TableHead className="px-4 py-3 text-white text-center">Resultado</TableHead>
-                <TableHead className="px-4 py-3 text-white text-left">Palpite</TableHead>
-                <TableHead className="px-4 py-3 text-white text-center">Situação</TableHead>
+                <TableHead className="px-4 py-3 text-white text-center text-xl font-bold">
+                  Horário
+                </TableHead>
+                <TableHead className="px-4 py-3 text-white text-left text-xl font-bold">
+                  Casa
+                </TableHead>
+                <TableHead className="px-4 py-3 text-white text-left text-xl font-bold">
+                  Fora
+                </TableHead>
+                <TableHead className="px-4 py-3 text-white text-center text-xl font-bold">
+                  Resultado
+                </TableHead>
+                <TableHead className="px-4 py-3 text-white text-left text-xl font-bold">
+                  Detalhes
+                </TableHead>
+                <TableHead className="px-4 py-3 text-white text-left text-xl font-bold">
+                  Palpite
+                </TableHead>
+                <TableHead className="px-4 py-3 text-white text-center text-xl font-bold">
+                  Situação
+                </TableHead>
               </TableRow>
             </TableHeader>
 

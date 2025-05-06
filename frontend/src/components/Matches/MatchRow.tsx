@@ -76,7 +76,7 @@ const MatchRow: React.FC<MatchRowProps> = ({
 
       <TableCell className="text-white text-center font-medium">
         {isFinished ? (
-          <span className="text-green-400">
+          <span className="text-green-400 text-xl font-bold">
             {match.home_score} x {match.away_score}
           </span>
         ) : (
@@ -84,15 +84,35 @@ const MatchRow: React.FC<MatchRowProps> = ({
         )}
       </TableCell>
 
+      <TableCell className="text-white/90 text-sm whitespace-nowrap max-w-[180px]">
+        <div className="flex flex-col leading-tight">
+          {match.stadium && (
+            <span className="font-medium">{match.stadium}</span>
+          )}
+          {(match.city || match.state) && (
+            <span className="text-white/60 text-xs">
+              {match.city}
+              {match.city && match.state ? ", " : ""}
+              {match.state}
+            </span>
+          )}
+          {match.broadcasters && (
+            <span className="text-soccer-yellow text-xs mt-1">
+              {match.broadcasters}
+            </span>
+          )}
+        </div>
+      </TableCell>
+
       <TableCell className="text-white text-left">
         {isUnavailable ? (
           savedPrediction ? (
-            <span className="text-sm text-white/80">
+            <span className="text-white/80 text-xl font-bold">
               {savedPrediction.home_team_score} x{" "}
               {savedPrediction.away_team_score}
             </span>
           ) : (
-            <span className="text-sm italic text-white/50">Sem palpite</span>
+            <span className="text-xs italic text-white/50">Sem palpite</span>
           )
         ) : (
           <MatchScoreInput

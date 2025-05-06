@@ -15,33 +15,36 @@ const MatchScoreInput: React.FC<Props> = ({
 }) => {
   const handleHomeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/\D/g, "").slice(0, 2);
-    onChangeHome(value && !isNaN(Number(value)) ? parseInt(value, 10).toString() : "0");
+    onChangeHome(
+      value && !isNaN(Number(value)) ? parseInt(value, 10).toString() : "0"
+    );
   };
-  
+
   const handleAwayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/\D/g, "").slice(0, 2);
-    onChangeAway(value && !isNaN(Number(value)) ? parseInt(value, 10).toString() : "0");
+    onChangeAway(
+      value && !isNaN(Number(value)) ? parseInt(value, 10).toString() : "0"
+    );
   };
-  
 
   return (
-    <div className="flex gap-2 items-center">
+    <div className="flex gap-1 items-center">
       <input
-        type="integer"
+        type="text"
         inputMode="numeric"
         value={homeValue}
         onChange={handleHomeChange}
-        className="w-12 h-10 rounded-md border border-gray-300 text-center bg-transparent text-white focus:ring-2 focus:ring-soccer-yellow focus:border-transparent"
+        className="w-8 h-7 rounded border border-white/20 text-center bg-transparent text-sm text-white appearance-none leading-tight focus:ring-1 focus:ring-soccer-yellow focus:outline-none disabled:opacity-40"
         disabled={disabled}
         maxLength={2}
       />
-      <span className="mx-1 font-bold text-white">x</span>
+      <span className="mx-1 text-xs text-white/80 font-semibold">x</span>
       <input
-        type="integer"
+        type="text"
         inputMode="numeric"
         value={awayValue}
         onChange={handleAwayChange}
-        className="w-12 h-10 rounded-md border border-gray-300 text-center bg-transparent text-white focus:ring-2 focus:ring-soccer-yellow focus:border-transparent"
+        className="w-8 h-7 rounded border border-white/20 text-center bg-transparent text-sm text-white appearance-none leading-tight focus:ring-1 focus:ring-soccer-yellow focus:outline-none disabled:opacity-40"
         disabled={disabled}
         maxLength={2}
       />
