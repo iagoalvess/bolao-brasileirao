@@ -1,4 +1,5 @@
-import { statsService } from "@/services/statsService";
+
+import { statisticsService } from "@/services/statsService";
 import React from "react";
 import { FaFlagCheckered } from "react-icons/fa";
 

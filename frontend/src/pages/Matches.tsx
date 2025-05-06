@@ -1,3 +1,4 @@
+
 import { useMatches } from "@/hooks/useMatches";
 import MatchesTable from "@/components/Matches/MatchesTable";
 import RoundSelector from "@/components/Matches/RoundSelector";
@@ -24,8 +25,8 @@ const MatchesPage = () => {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gradient-to-br from-soccer-field via-soccer-green to-soccer-yellow p-6">
-        <div className="max-w-5xl mx-auto">
+      <div className="min-h-screen w-full bg-gradient-to-br from-soccer-field via-soccer-green to-soccer-yellow p-6">
+        <div className="w-full mx-auto">
           <PageHeader showBackButton onBackClick={() => navigate("/home")} />
           <RoundSelector
             selectedRound={selectedRound}

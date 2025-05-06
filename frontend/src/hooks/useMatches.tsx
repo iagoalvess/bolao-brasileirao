@@ -1,7 +1,9 @@
+
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { matchService } from "@/services/matchService";
-import { predictionService, Prediction } from "@/services/predictionService";
+import { predictionService } from "@/services/predictionService";
+import { Prediction } from "@/types/prediction";
 import { useToast } from "@/components/ui/use-toast";
 
 export const useMatches = () => {

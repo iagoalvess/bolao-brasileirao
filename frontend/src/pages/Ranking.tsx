@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { authService, User } from "@/services/userService";
@@ -28,8 +29,8 @@ const RankingPage = () => {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gradient-to-br from-soccer-field via-soccer-green to-soccer-yellow p-6">
-        <div className="max-w-6xl mx-auto">
+      <div className="min-h-screen w-full bg-gradient-to-br from-soccer-field via-soccer-green to-soccer-yellow p-6">
+        <div className="w-full mx-auto">
           <PageHeader showBackButton onBackClick={() => navigate("/home")} />
           <RankingCard ranking={ranking} isLoading={isLoading} error={error} />
         </div>
