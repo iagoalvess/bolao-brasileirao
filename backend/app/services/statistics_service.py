@@ -16,10 +16,10 @@ def get_personal_statistics(db: Session, user_id: int):
 
         rounds.add(p.match.round)
 
-        if p.home_score == p.match.home_score and p.away_score == p.match.away_score:
+        if p.home_team_score == p.match.home_score and p.away_team_score == p.match.away_score:
             exact += 1
             total_points += 5
-        elif (p.home_score - p.away_score) * (
+        elif (p.home_team_score - p.away_team_score) * (
             p.match.home_score - p.match.away_score
         ) > 0:
             winner += 1
@@ -53,9 +53,9 @@ def get_global_statistics(db: Session):
 
         round_id = p.match.round
 
-        if p.home_score == p.match.home_score and p.away_score == p.match.away_score:
+        if p.home_team_score == p.match.home_score and p.away_team_score == p.match.away_score:
             points = 5
-        elif (p.home_score - p.away_score) * (
+        elif (p.home_team_score - p.away_team_score) * (
             p.match.home_score - p.match.away_score
         ) > 0:
             points = 3
@@ -64,10 +64,10 @@ def get_global_statistics(db: Session):
 
         points_by_round.setdefault(round_id, []).append(points)
 
-        team_counter[p.home_team] += 1
-        team_counter[p.away_team] += 1
+        team_counter[p.match.home_team] += 1
+        team_counter[p.match.away_team] += 1
 
-        score_str = f"{p.home_score}x{p.away_score}"
+        score_str = f"{p.home_team_score}x{p.away_team_score}"
         score_counter[score_str] += 1
 
     rounds = list(points_by_round.values())
@@ -98,9 +98,9 @@ def get_points_per_round(db: Session, user_id: int):
     for p in predictions:
         round_id = p.match.round
 
-        if p.home_score == p.match.home_score and p.away_score == p.match.away_score:
+        if p.home_team_score == p.match.home_score and p.away_team_score == p.match.away_score:
             points = 5
-        elif (p.home_score - p.away_score) * (
+        elif (p.home_team_score - p.away_team_score) * (
             p.match.home_score - p.match.away_score
         ) > 0:
             points = 3
@@ -109,4 +109,5 @@ def get_points_per_round(db: Session, user_id: int):
 
         points_by_round.setdefault(round_id, []).append(points)
 
-    return {r: sum(pts) for r, pts in points_by_round.items()}
+    return {str(r): sum(pts) for r, pts in points_by_round.items()}
+
