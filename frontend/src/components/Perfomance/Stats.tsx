@@ -3,6 +3,7 @@ import { statisticsService, PersonalStats } from "@/services/statsService";
 import { useAuth } from "@/contexts/AuthContext";
 import PerformanceSummary from "./PerformanceSummary";
 import PointsChart from "./PointsChart";
+import CumulativeChart from "./CumulativeChart";
 
 const Stats = () => {
   const [stats, setStats] = useState<PersonalStats | null>(null);
@@ -51,7 +52,10 @@ const Stats = () => {
   return (
     <div className="mt-6 space-y-6">
       <PerformanceSummary stats={stats} />
-      <PointsChart data={pointsData} />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <PointsChart data={pointsData} />
+        <CumulativeChart data={pointsData} />
+      </div>
     </div>
   );
 };
