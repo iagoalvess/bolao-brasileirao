@@ -7,6 +7,14 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useQuery } from "@tanstack/react-query";
+import { authService } from "@/services/userService";
 
 interface PageHeaderProps {
   showBackButton?: boolean;
@@ -20,6 +28,22 @@ const PageHeader = ({
   onBackClick,
 }: PageHeaderProps) => {
   const { user, signOut } = useAuth();
+
+  // Buscar informações detalhadas do usuário
+  const { data: userDetails } = useQuery({
+    queryKey: ["user-details", user?.id],
+    queryFn: () => (user ? authService.getUserById(user.id) : null),
+    enabled: !!user,
+  });
+
+  const getInitials = (username: string) => {
+    return username
+      .split(" ")
+      .map((name) => name[0])
+      .join("")
+      .toUpperCase()
+      .substring(0, 2);
+  };
 
   return (
     <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8 border-b border-white/10 pb-4">
@@ -61,38 +85,56 @@ const PageHeader = ({
       </div>
 
       <div className="flex items-center gap-3 group">
-        <div className="flex items-center gap-2">
-          <User
-            size={20}
-            className="text-white/80 hover:text-white transition-colors"
-          />
-          <div className="flex flex-col">
-            <span className="text-sm font-medium text-white/90 truncate max-w-[160px]">
-              {user?.username}
-            </span>
-          </div>
-        </div>
+        <Popover>
+          <PopoverTrigger asChild>
+            <div className="flex items-center gap-2 cursor-pointer hover:bg-emerald-50/10 p-2 rounded-lg transition-colors duration-200">
+              <Avatar className="h-10 w-10 bg-emerald-600 border-2 border-yellow-300 shadow-md hover:border-emerald-600 transition-all">
+                <AvatarFallback className="text-white text-xl font-bold tracking-wider bg-emerald-500">
+                  {user && getInitials(user.username)}
+                </AvatarFallback>
+              </Avatar>
 
-        <TooltipProvider delayDuration={200}>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                onClick={signOut}
-                size="icon"
-                variant="ghost"
-                className="text-white/50 hover:text-red-300 hover:bg-transparent transition-all"
-              >
-                <LogOut
-                  size={18}
-                  className="transform group-hover:translate-x-0.5 transition-transform"
-                />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent className="bg-white/90 text-emerald-700 border-0 shadow-sm">
-              <p>Sair da conta</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+              <div className="flex flex-col">
+                <span className="text-sm font-medium text-emerald-50 truncate max-w-[160px]">
+                  {user?.username}
+                </span>
+                <span className="text-xs text-emerald-200/80">Ver perfil</span>
+              </div>
+            </div>
+          </PopoverTrigger>
+          <PopoverContent className="w-80 p-0 bg-emerald-50 backdrop-blur-lg border border-emerald-200 shadow-2xl rounded-xl overflow-hidden">
+            <div className="flex flex-col p-4">
+              <div className="flex items-center gap-4 pb-4 border-b border-emerald-100">
+                <Avatar className="h-12 w-12 bg-emerald-600 border-2 border-emerald-700">
+                  <AvatarFallback className="text-white text-lg font-bold bg-emerald-500">
+                    {user && getInitials(user.username)}
+                  </AvatarFallback>
+                </Avatar>
+
+                <div>
+                  <h3 className="text-lg font-bold text-emerald-900">
+                    {user?.username}
+                  </h3>
+                  <p className="text-sm text-emerald-700/80 truncate">
+                    {user?.email}
+                  </p>
+                </div>
+              </div>
+
+              <div className="pt-4 space-y-2">
+
+                <Button
+                  onClick={signOut}
+                  variant="ghost"
+                  className="w-full justify-start text-red-600 hover:bg-red-50"
+                >
+                  <LogOut size={16} className="mr-2" />
+                  Sair da conta
+                </Button>
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
     </header>
   );
