@@ -1,0 +1,23 @@
+export const teams = [
+    { name: "Flamengo", icon: "/icons/flamengo.png" },
+    { name: "Palmeiras", icon: "/icons/palmeiras.png" },
+    { name: "Corinthians", icon: "/icons/corinthians.png" },
+    { name: "São Paulo", icon: "/icons/sao_paulo.png" },
+    { name: "Santos", icon: "/icons/santos_fc.png" },
+    { name: "Atlético", icon: "/icons/atletico_mineiro_saf.png" },
+    { name: "Grêmio", icon: "/icons/gremio.png" },
+    { name: "Internacional", icon: "/icons/internacional.png" },
+    { name: "Cruzeiro", icon: "/icons/cruzeiro_saf.png" },
+    { name: "Botafogo", icon: "/icons/botafogo.png" },
+    { name: "Fluminense", icon: "/icons/fluminense.png" },
+    { name: "Vasco", icon: "/icons/vasco_da_gama_saf.png" },
+    { name: "Ceará", icon: "/icons/ceara.png" },
+    { name: "Fortaleza", icon: "/icons/fortaleza_ec_saf.png" },
+    { name: "Bahia", icon: "/icons/bahia.png" },
+    { name: "Bragantino", icon: "/icons/red_bull_bragantino.png" },
+    { name: "Juventude", icon: "/icons/juventude.png" },
+    { name: "Mirassol", icon: "/icons/mirassol.png" },
+    { name: "Vitoria", icon: "/icons/vitoria.png" },
+    { name: "Sport", icon: "/icons/sport.png" },
+  ];
+  

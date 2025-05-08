@@ -11,7 +11,8 @@ class User(Base):
     email = Column(String(100), unique=True, nullable=False)
     password = Column(String(255), nullable=False)
     total_points = Column(Integer, default=0, nullable=False)
-
+    team = Column(String(50), nullable=True)
+    
     predictions = relationship("Prediction", back_populates="user")
 
     group_members = relationship(

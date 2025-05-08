@@ -21,11 +21,12 @@ export const authService = {
     return response.data;
   },
 
-  register: async (username: string, email: string, password: string) => {
+  register: async (username: string, email: string, password: string, team?: string) => {
     const response = await api.post('/users/', {
       username,
       email,
       password,
+      team,
     });
     return response.data;
   },

@@ -19,7 +19,7 @@ interface AuthContextData {
   isAuthenticated: boolean;
   loading: boolean;
   signIn: (username: string, password: string) => Promise<void>;
-  signUp: (username: string, email: string, password: string) => Promise<void>;
+  signUp: (username: string, email: string, password: string, team: string) => Promise<void>;
   signOut: () => void;
 }
 
@@ -80,10 +80,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
-  async function signUp(username: string, email: string, password: string) {
+  async function signUp(username: string, email: string, password: string, team: string) {
     try {
       setLoading(true);
-      await authService.register(username, email, password);
+      await authService.register(username, email, password, team);
       navigate("/login");
     } catch (error) {
       console.error("Erro ao criar conta:", error);
