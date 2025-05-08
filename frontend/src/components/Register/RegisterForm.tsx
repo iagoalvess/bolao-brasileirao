@@ -71,7 +71,7 @@ const RegisterForm = ({ onSubmit, loading }: RegisterFormProps) => {
       return;
     }
 
-    onSubmit(username, email, password, confirmPassword, team);
+    onSubmit(username, email, password, team, confirmPassword);
   };
 
   return (

@@ -23,6 +23,7 @@ const RankingPage = () => {
         id: user.id,
         username: user.username,
         total_points: user.total_points,
+        team: user.team,
       }))
       .sort((a, b) => b.total_points - a.total_points);
   }, [users]);

@@ -15,6 +15,7 @@ interface RegisterCardProps {
     username: string,
     email: string,
     password: string,
+    team: string,
     confirmPassword: string
   ) => void;
   loading: boolean;

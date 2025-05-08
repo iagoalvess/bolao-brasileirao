@@ -29,7 +29,6 @@ const PageHeader = ({
 }: PageHeaderProps) => {
   const { user, signOut } = useAuth();
 
-  // Buscar informações detalhadas do usuário
   const { data: userDetails } = useQuery({
     queryKey: ["user-details", user?.id],
     queryFn: () => (user ? authService.getUserById(user.id) : null),
@@ -122,7 +121,6 @@ const PageHeader = ({
               </div>
 
               <div className="pt-4 space-y-2">
-
                 <Button
                   onClick={signOut}
                   variant="ghost"

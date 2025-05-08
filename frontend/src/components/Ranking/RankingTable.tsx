@@ -10,6 +10,7 @@ import { User } from "@/services/userService";
 import { Loader2, Medal } from "lucide-react";
 import { useGroups } from "@/hooks/useGroups";
 import { useEffect } from "react";
+import { teams } from "@/data/teams";
 
 interface RankingTableProps {
   ranking: User[];
@@ -59,6 +60,14 @@ const RankingTable = ({ ranking }: RankingTableProps) => {
     );
   }
 
+  const getTeamIcon = (teamName?: string) => {
+    if (!teamName) return null;
+    const team = teams.find(
+      (t) => t.name.toLowerCase() === teamName.toLowerCase()
+    );
+    return team?.icon || null;
+  };
+
   return (
     <div className="mt-6">
       <h2 className="text-2xl font-bold text-white mb-4 text-center">
@@ -100,8 +109,18 @@ const RankingTable = ({ ranking }: RankingTableProps) => {
                 </div>
               </TableCell>
               <TableCell className="px-6 py-4 text-lg font-medium text-gray-100">
-                {user.username}
+                <div className="flex items-center gap-2">
+                  {getTeamIcon(user.team) && (
+                    <img
+                      src={getTeamIcon(user.team)}
+                      alt={`Ícone do ${user.team}`}
+                      className="w-8 h-8 object-contain"
+                    />
+                  )}
+                  <span>{user.username}</span>
+                </div>
               </TableCell>
+
               <TableCell className="px-6 py-4 text-lg font-bold text-soccer-yellow">
                 {user.total_points}
               </TableCell>

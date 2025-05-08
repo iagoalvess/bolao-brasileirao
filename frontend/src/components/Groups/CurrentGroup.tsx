@@ -4,6 +4,7 @@ import { Loader2 } from "lucide-react";
 import { groupService } from "@/services/groupService";
 import { authService, User } from "@/services/userService";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { teams } from "@/data/teams";
 
 interface CurrentGroupProps {
   groupName: string;
@@ -40,6 +41,14 @@ const CurrentGroup: React.FC<CurrentGroupProps> = ({
     fetchMembers();
   }, [groupId]);
 
+  const getTeamIcon = (teamName?: string) => {
+    if (!teamName) return null;
+    const team = teams.find(
+      (t) => t.name.toLowerCase() === teamName.toLowerCase()
+    );
+    return team?.icon || null;
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-soccer-field via-soccer-green to-soccer-yellow p-6">
       <div className="max-w-6xl mx-auto">
@@ -47,7 +56,9 @@ const CurrentGroup: React.FC<CurrentGroupProps> = ({
           <CardHeader className="pb-4 border-b border-white/10">
             <CardTitle className="text-2xl font-semibold text-white drop-shadow">
               Você está no grupo:{" "}
-              <span className="text-soccer-yellow/80 text-xg font-bold">{groupName}</span>
+              <span className="text-soccer-yellow/80 text-xg font-bold">
+                {groupName}
+              </span>
             </CardTitle>
           </CardHeader>
           <CardContent className="text-center text-white py-4">
@@ -60,7 +71,16 @@ const CurrentGroup: React.FC<CurrentGroupProps> = ({
               ) : (
                 <ul className="text-soccer-yellow/80 space-y-1">
                   {members.map((user) => (
-                    <li key={user.id}>{user.username}</li>
+                    <li key={user.id} className="flex items-center gap-2">
+                      {getTeamIcon(user.team) && (
+                        <img
+                          src={getTeamIcon(user.team)}
+                          alt={`Ícone do ${user.team}`}
+                          className="w-8 h-8 object-contain"
+                        />
+                      )}
+                      <span>{user.username}</span>
+                    </li>
                   ))}
                 </ul>
               )}

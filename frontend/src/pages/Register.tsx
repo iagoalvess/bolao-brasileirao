@@ -12,11 +12,12 @@ const RegisterPage = () => {
     username: string,
     email: string,
     password: string,
+    team: string,
     confirmPassword: string
   ) => {
     try {
       setLoading(true);
-      await signUp(username, email, password);
+      await signUp(username, email, password, team);
       toast({
         title: "Conta criada com sucesso!",
         description: "Você já pode fazer login com suas credenciais.",

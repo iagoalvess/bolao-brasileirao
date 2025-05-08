@@ -5,6 +5,7 @@ export interface User {
   username: string;
   email: string;
   total_points: number;
+  team?: string;
 }
 
 export const authService = {
