@@ -2,11 +2,9 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from ..models.user import User
 from ..schemas.user import UserCreate
-from ..services.auth_service import (
-    get_password_hash,
-    verify_password,
-    create_access_token,
-)
+
+from ..services.auth.token import create_access_token
+from ..services.auth.password import verify_password, get_password_hash
 
 
 def create_new_user(user: UserCreate, db: Session) -> User:

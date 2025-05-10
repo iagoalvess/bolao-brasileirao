@@ -6,7 +6,7 @@ from ..database.connection import get_db
 from ..models.group import Group
 from ..models.group_member import GroupMember
 from ..models.user import User
-from ..services.auth_service import get_current_user
+from ..services.auth.dependencies import get_current_user
 from ..schemas.group import GroupCreate, GroupResponse
 from ..services.group_service import GroupService
 
