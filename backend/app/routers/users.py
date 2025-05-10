@@ -12,7 +12,7 @@ from ..services.auth import (
 from ..database.connection import get_db
 from ..models.user import User
 from ..schemas.user import UserCreate, UserResponse
-from ..services.user_service import (
+from ..services.user import (
     create_new_user,
     get_user_by_id,
     authenticate_user,
