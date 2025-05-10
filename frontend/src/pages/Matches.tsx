@@ -3,6 +3,7 @@ import { useMatches } from "@/hooks/useMatches";
 import MatchesTable from "@/components/Matches/MatchesTable";
 import RoundSelector from "@/components/Matches/RoundSelector";
 import PageHeader from "@/components/PageHeader";
+import PageFooter from "@/components/PageFooter";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { useNavigate } from "react-router-dom";
 
@@ -43,6 +44,8 @@ const MatchesPage = () => {
             alreadyPredicted={alreadyPredicted}
             getPredictionForMatch={getPredictionForMatch}
           />
+
+          <PageFooter />
         </div>
       </div>
     </ProtectedRoute>

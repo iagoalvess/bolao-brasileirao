@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGroups } from "@/hooks/useGroups";
 import PageHeader from "@/components/PageHeader";
+import PageFooter from "@/components/PageFooter";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import CurrentGroup from "@/components/Groups/CurrentGroup";
 import CreateGroup from "@/components/Groups/CreateGroup";
@@ -72,6 +73,8 @@ const GroupsPage = () => {
               />
             </>
           )}
+
+          <PageFooter />
         </div>
       </div>
     </ProtectedRoute>

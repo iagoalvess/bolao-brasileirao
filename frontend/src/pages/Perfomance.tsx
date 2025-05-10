@@ -1,5 +1,6 @@
 
 import PageHeader from "@/components/PageHeader";
+import PageFooter from "@/components/PageFooter";
 import Stats from "@/components/Perfomance/Stats";
 import { useNavigate } from "react-router-dom";
 
@@ -11,6 +12,7 @@ const PerfomancePage = () => {
       <div className="w-full mx-auto px-2 sm:px-4 lg:px-6 py-6">
         <PageHeader showBackButton onBackClick={() => navigate("/home")} />
         <Stats />
+        <PageFooter />
       </div>
     </div>
   );

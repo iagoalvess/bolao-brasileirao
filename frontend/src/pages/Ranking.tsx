@@ -5,6 +5,7 @@ import { authService, User } from "@/services/userService";
 import { useNavigate } from "react-router-dom";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import PageHeader from "@/components/PageHeader";
+import PageFooter from "@/components/PageFooter";
 import RankingCard from "@/components/Ranking/RankingCard";
 
 const RankingPage = () => {
@@ -34,6 +35,7 @@ const RankingPage = () => {
         <div className="w-full mx-auto">
           <PageHeader showBackButton onBackClick={() => navigate("/home")} />
           <RankingCard ranking={ranking} isLoading={isLoading} error={error} />
+          <PageFooter />
         </div>
       </div>
     </ProtectedRoute>

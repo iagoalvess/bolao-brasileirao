@@ -1,5 +1,6 @@
 
 import PageHeader from "@/components/PageHeader";
+import PageFooter from "@/components/PageFooter";
 import HomePageNavigation from "@/components/Home/HomeNavigation";
 import WelcomeCard from "@/components/Home/WelcomeCard";
 import NewsDashboard from "@/components/Home/News";
@@ -30,6 +31,8 @@ const HomePage = () => {
             <NewsDashboard />
           </div>
         </div>
+
+        <PageFooter />
       </div>
     </div>
   );
