@@ -1,18 +1,22 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from app.models.prediction import Prediction
 from .utils import calculate_points
+from ...models.match import Match
 
 
 def get_personal_statistics(db: Session, user_id: int):
-    predictions = db.query(Prediction).filter(Prediction.user_id == user_id).all()
+    predictions = (
+        db.query(Prediction)
+        .options(joinedload(Prediction.match))
+        .join(Prediction.match)
+        .filter(Prediction.user_id == user_id, Match.status == "FINISHED")
+        .all()
+    )
 
     exact = winner = error = total_points = 0
     rounds = set()
 
     for p in predictions:
-        if not p.match or p.match.status != "FINISHED":
-            continue
-
         rounds.add(p.match.round)
         points = calculate_points(p, p.match)
         total_points += points
