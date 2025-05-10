@@ -31,12 +31,13 @@ const RankingPage = () => {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen w-full bg-gradient-to-br from-soccer-field via-soccer-green to-soccer-yellow p-6">
-        <div className="w-full mx-auto">
+      <div className="min-h-screen w-full flex flex-col bg-gradient-to-br from-soccer-field via-soccer-green to-soccer-yellow p-6">
+        <div className="w-full mx-auto flex-grow flex flex-col">
           <PageHeader showBackButton onBackClick={() => navigate("/home")} />
           <RankingCard ranking={ranking} isLoading={isLoading} error={error} />
-          <PageFooter />
         </div>
+
+        <PageFooter />
       </div>
     </ProtectedRoute>
   );

@@ -26,9 +26,10 @@ const MatchesPage = () => {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen w-full bg-gradient-to-br from-soccer-field via-soccer-green to-soccer-yellow p-6">
-        <div className="w-full mx-auto">
-          <PageHeader showBackButton onBackClick={() => navigate("/home")} />
+      <div className="min-h-screen w-full flex flex-col bg-gradient-to-br from-soccer-field via-soccer-green to-soccer-yellow p-6">
+        <PageHeader showBackButton onBackClick={() => navigate("/home")} />
+
+        <div className="w-full mx-auto flex-grow flex flex-col">
           <RoundSelector
             selectedRound={selectedRound}
             onChange={setSelectedRound}
@@ -44,9 +45,9 @@ const MatchesPage = () => {
             alreadyPredicted={alreadyPredicted}
             getPredictionForMatch={getPredictionForMatch}
           />
-
-          <PageFooter />
         </div>
+
+        <PageFooter />
       </div>
     </ProtectedRoute>
   );
