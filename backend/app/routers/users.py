@@ -3,11 +3,11 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from typing import List
 
-from ..services.auth.dependencies import (
+from ..services.auth import (
     get_current_user,
     verify_refresh_token_and_get_user,
+    create_refresh_token,
 )
-from ..services.auth.token import create_refresh_token
 
 from ..database.connection import get_db
 from ..models.user import User

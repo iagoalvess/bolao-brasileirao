@@ -6,15 +6,21 @@ from ..database.connection import get_db
 from ..models.group import Group
 from ..models.group_member import GroupMember
 from ..models.user import User
-from ..services.auth.dependencies import get_current_user
+from ..services.auth import get_current_user
 from ..schemas.group import GroupCreate, GroupResponse
-from ..services.group_service import GroupService
+from ..services.group import (
+    create_group,
+    get_all_groups,
+    add_member_to_group,
+    remove_member_from_group,
+    get_member_ids,
+)
 
 router = APIRouter(prefix="/groups", tags=["groups"])
 
 
 @router.post("/", response_model=GroupResponse)
-async def create_group(
+async def create(
     group: GroupCreate,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
@@ -23,12 +29,12 @@ async def create_group(
     if existing_group:
         raise HTTPException(status_code=400, detail="Nome de grupo já em uso")
 
-    return GroupService.create_group(db, name=group.name, current_user=current_user)
+    return create_group(db, name=group.name, current_user=current_user)
 
 
 @router.get("/", response_model=List[GroupResponse])
 async def get_groups(db: Session = Depends(get_db)):
-    groups = GroupService.get_all_groups(db)
+    groups = get_all_groups(db)
     return groups
 
 
@@ -75,7 +81,7 @@ async def join_group(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    return GroupService.add_member_to_group(db, group_id, current_user)
+    return add_member_to_group(db, group_id, current_user)
 
 
 @router.post("/{group_id}/leave", response_model=GroupResponse)
@@ -84,10 +90,10 @@ async def leave_group(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    return GroupService.remove_member_from_group(db, group_id, current_user)
+    return remove_member_from_group(db, group_id, current_user)
 
 
 @router.get("/{group_id}/members", response_model=List[int])
 async def get_group_member_ids(group_id: int, db: Session = Depends(get_db)):
-    member_ids = GroupService.get_member_ids(db, group_id)
+    member_ids = get_member_ids(db, group_id)
     return member_ids

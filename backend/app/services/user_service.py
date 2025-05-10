@@ -3,8 +3,7 @@ from fastapi import HTTPException
 from ..models.user import User
 from ..schemas.user import UserCreate
 
-from ..services.auth.token import create_access_token
-from ..services.auth.password import verify_password, get_password_hash
+from ..services.auth import verify_password, get_password_hash, create_access_token
 
 
 def create_new_user(user: UserCreate, db: Session) -> User:

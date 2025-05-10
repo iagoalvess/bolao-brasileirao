@@ -7,7 +7,7 @@ from ..models.match import Match
 from ..models.prediction import Prediction
 from ..models.user import User
 from ..schemas.prediction import PredictionCreate, PredictionResponse
-from ..services.auth.dependencies import get_current_user
+from ..services.auth import get_current_user
 
 router = APIRouter(prefix="/predictions", tags=["predictions"])
 
