@@ -2,7 +2,10 @@
 
 Projeto para gerenciamento de um bolão de futebol do Campeonato Brasileiro.
 
-## Como rodar
+# Projeto em produção
+https://bolao-brasileirao.vercel.app/
+
+## Projeto para desenvolvedor
 ```bash
 # Crie o virtualenv e ative
 python3 -m venv venv
@@ -18,5 +21,5 @@ uvicorn app.main:app --reload
 npm i
 npm run dev
 
-# Documentação por enquanto local em
-http://localhost:8000/docs#/
+# Swagger
+https://bolao-brasileirao-oy40.onrender.com/docs#/
