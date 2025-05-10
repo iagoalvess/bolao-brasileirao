@@ -2,11 +2,10 @@ from typing import Dict
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.database.connection import get_db
-from app.services.statistics_service import (
-    get_personal_statistics,
-    get_global_statistics,
-    get_points_per_round,
-)
+
+from app.services.statistics.global_stats import get_global_statistics
+from app.services.statistics.personal import get_personal_statistics
+from app.services.statistics.per_round import get_points_per_round
 from app.schemas.statistics import PersonalStats, GlobalStats
 
 router = APIRouter(prefix="/statistics", tags=["statistics"])
