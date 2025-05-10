@@ -1,6 +1,10 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:8000';
+// LOCAL
+//const BASE_URL = 'http://localhost:8000';
+
+// PRODUCTION
+const BASE_URL = 'https://bolao-brasileirao-oy40.onrender.com';
 
 export const api = axios.create({
   baseURL: BASE_URL,
