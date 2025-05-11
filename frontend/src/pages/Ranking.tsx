@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { authService, User } from "@/services/userService";
@@ -7,14 +6,27 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import PageHeader from "@/components/PageHeader";
 import PageFooter from "@/components/PageFooter";
 import RankingCard from "@/components/Ranking/RankingCard";
+import { useGroups } from "@/hooks/useGroups";
+import { groupService } from "@/services/groupService";
 
 const RankingPage = () => {
   const navigate = useNavigate();
+  const { currentGroup } = useGroups();
 
-  const { data: users, isLoading, error } = useQuery({
-    queryKey: ["all-users"],
-    queryFn: authService.getUsers,
+  const {
+    data: users,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["group-users", currentGroup?.id],
+    queryFn: async () => {
+      if (!currentGroup) return [];
+      const memberIds = await groupService.getMemberIds(currentGroup.id);
+      const memberPromises = memberIds.map((id) => authService.getUserById(id));
+      return Promise.all(memberPromises);
+    },
     retry: false,
+    enabled: !!currentGroup?.id,
   });
 
   const ranking = React.useMemo(() => {
