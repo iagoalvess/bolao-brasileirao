@@ -1,12 +1,5 @@
 import { api } from "./apiService";
-
-export interface User {
-  id: number;
-  username: string;
-  email: string;
-  total_points: number;
-  team?: string;
-}
+import { User } from "../types/user";
 
 export const authService = {
   login: async (username: string, password: string) => {

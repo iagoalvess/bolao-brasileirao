@@ -1,11 +1,5 @@
 import { api } from "./apiService";
-
-export interface PersonalStats {
- exact_hits: number;
- winner_hits: number;
- errors: number;
- avg_points_per_round: number;
-}
+import { PersonalStats } from "../types/stats";
 
 export const statisticsService = {
  getPersonalStats: async (userId: number): Promise<PersonalStats> => {

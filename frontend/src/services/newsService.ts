@@ -1,12 +1,6 @@
 // src/services/newsService.ts
 import { api } from "./apiService";
-
-export interface NewsItem {
- title: string;
- link: string;
- date: string;
- author?: string;
-}
+import { NewsItem } from "../types/news";
 
 export const newsService = {
  getFootballNews: async (): Promise<NewsItem[]> => {

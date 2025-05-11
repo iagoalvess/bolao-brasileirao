@@ -1,10 +1,5 @@
 import { api } from "./apiService";
-
-export interface Group {
- id: number;
- name: string;
- members_count: number;
-}
+import { Group } from "../types/group";
 
 export const groupService = {
  getAllGroups: async (): Promise<Group[]> => {
