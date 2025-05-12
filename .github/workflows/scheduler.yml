@@ -11,5 +11,5 @@ jobs:
     steps:
       - name: Call FastAPI scheduled job
         run: |
-          curl -X POST https://bolao-brasileirao-oy40.onrender.com/matches-update \
+          curl -X POST https://bolao-brasileirao-oy40.onrender.com/matches/matches-update \
             -H "Authorization: Bearer ${{ secrets.MATCH_UPDATE_TOKEN }}"
