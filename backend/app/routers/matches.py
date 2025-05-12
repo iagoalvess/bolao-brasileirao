@@ -60,6 +60,6 @@ async def get_next_match(db: Session = Depends(get_db)):
 @router.post("/matches-update")
 def run_match_update(authorization: str = Header(...)):
     if authorization != f"Bearer {settings.SECRET_KEY}":
-        raise HTTPException(status_code=403, detail="Not authorized")
+        raise HTTPException(status_code=403, detail="Não autorizado")
     update_matches_job()
     return {"message": "Executando atualização de partidas"}
