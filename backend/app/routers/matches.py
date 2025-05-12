@@ -1,7 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Header
 from sqlalchemy.orm import Session
 from typing import List
 
+from ..services.scheduler_service import update_matches_job
+from ..config.settings import settings
 from ..database.connection import get_db
 from ..models.match import Match
 from ..schemas.match import MatchResponse
@@ -53,3 +55,11 @@ async def get_next_match(db: Session = Depends(get_db)):
         )
 
     return next_match
+
+
+@router.post("/matches-update")
+def run_match_update(authorization: str = Header(...)):
+    if authorization != f"Bearer {settings.SECRET_KEY}":
+        raise HTTPException(status_code=403, detail="Not authorized")
+    update_matches_job()
+    return {"message": "Executando atualização de partidas"}

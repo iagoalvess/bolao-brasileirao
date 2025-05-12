@@ -1,0 +1,15 @@
+name: Run Scheduled Match Update
+
+on:
+  schedule:
+    - cron: '0 5 * * *'  # 5h UTC = 2h Brasília
+  workflow_dispatch:
+
+jobs:
+  run-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call FastAPI scheduled job
+        run: |
+          curl -X POST https://bolao-brasileirao-oy40.onrender.com/run-match-update \
+            -H "Authorization: Bearer ${{ secrets.MATCH_UPDATE_TOKEN }}"
