@@ -1,6 +1,8 @@
 
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/components/ui/use-toast';
+import { useEffect } from 'react';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -8,6 +10,17 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const { isAuthenticated, loading } = useAuth();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    if (!loading && !isAuthenticated) {
+      toast({
+        title: "Acesso negado",
+        description: "Você precisa estar logado para acessar esta página",
+        variant: "destructive"
+      });
+    }
+  }, [isAuthenticated, loading]);
 
   if (loading) {
     return (
