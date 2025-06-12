@@ -1,17 +1,12 @@
+from typing import List
 from sqlalchemy.orm import Session, joinedload
 from ...models.prediction import Prediction
 from ...models.match import Match
 from .utils import calculate_points
 
 
-def get_points_per_round(db: Session, user_id: int):
-    predictions = (
-        db.query(Prediction)
-        .options(joinedload(Prediction.match))
-        .filter(Prediction.user_id == user_id)
-        .all()
-    )
-
+def get_points_per_round(predictions:List[Prediction]):
+    
     points_by_round = {}
 
     for p in predictions:

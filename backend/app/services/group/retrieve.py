@@ -47,3 +47,4 @@ def get_user_group(db: Session, user_id: int) -> Group | None:
     return (
         db.query(Group).join(GroupMember).filter(GroupMember.user_id == user_id).first()
     )
+

@@ -1,3 +1,4 @@
+from typing import List
 from sqlalchemy.orm import Session
 from collections import Counter
 from app.models.prediction import Prediction
@@ -5,10 +6,7 @@ from app.models.match import Match
 from .utils import calculate_points
 
 
-def get_global_statistics(db: Session):
-    predictions = (
-        db.query(Prediction).join(Match).filter(Match.status == "FINISHED").all()
-    )
+def get_global_statistics(predictions: List[Prediction]):
 
     team_counter = Counter()
     score_counter = Counter()

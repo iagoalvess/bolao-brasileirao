@@ -1,17 +1,11 @@
+from typing import List
 from sqlalchemy.orm import Session, joinedload
 from app.models.prediction import Prediction
 from .utils import calculate_points
 from ...models.match import Match
 
 
-def get_personal_statistics(db: Session, user_id: int):
-    predictions = (
-        db.query(Prediction)
-        .options(joinedload(Prediction.match))
-        .join(Prediction.match)
-        .filter(Prediction.user_id == user_id, Match.status == "FINISHED")
-        .all()
-    )
+def get_personal_statistics(predictions: List[Prediction]):
 
     exact = winner = error = total_points = 0
     rounds = set()

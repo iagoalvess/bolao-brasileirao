@@ -10,8 +10,8 @@ from ..models.user import User
 
 
 class MatchService:
-    @staticmethod
-    def sync_all_matches_from_api(db: Session) -> None:
+    
+    def sync_get_response_api():
         url = (
             "https://cbf.com.br/api/proxy?path=/jogos/tabela-detalhada/campeonato/12606"
         )
@@ -20,8 +20,13 @@ class MatchService:
         if response.status_code != 200:
             raise Exception(f"Erro ao acessar API da CBF: {response.status_code}")
 
-        data = response.json()
-
+        return response.json()
+    
+    @staticmethod
+    def sync_all_matches_from_api(self, db: Session) -> None:
+        
+        data = self.sync_get_response_api()
+        
         for fase_info in data.values():
             jogos = fase_info.get("jogos", [])
 

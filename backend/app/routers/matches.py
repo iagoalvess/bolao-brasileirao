@@ -7,6 +7,7 @@ from ..config.settings import settings
 from ..database.connection import get_db
 from ..models.match import Match
 from ..schemas.match import MatchResponse
+from ..schemas.match import MatchCreate
 from ..services.match_service import MatchService
 
 router = APIRouter(prefix="/matches", tags=["matches"])
