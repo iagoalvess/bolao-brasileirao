@@ -4,7 +4,7 @@ on:
   schedule:
     - cron: '0 5 * * *'  # 5h UTC = 2h Brasília
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
   workflow_dispatch:
 
 jobs:
