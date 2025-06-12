@@ -11,7 +11,6 @@ from unittest.mock import MagicMock
 
 from backend.app.services.statistics.personal import get_personal_statistics
 from backend.app.services.statistics.utils import calculate_points
-pytestmark = pytest.mark.asyncio
 
 def create_mock_match(status="FINISHED", round=1, home_score=0, away_score=0, home_team="", away_team=""):
     mock_match = MagicMock()
