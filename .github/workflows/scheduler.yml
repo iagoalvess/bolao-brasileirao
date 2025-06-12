@@ -38,5 +38,6 @@ jobs:
          DATABASE_PORT: 3306
          DATABASE_NAME: test
          SSL_CA_PATH: /dev/null
+         SECRET_KEY: "supersecretfortests"
         run: PYTHONPATH=./backend pytest -s
       
