@@ -2,6 +2,10 @@
 
 Projeto para gerenciamento de um bolão de futebol do Campeonato Brasileiro.
 
+## Desenvolvedores
+- Iago da Silva Rodrigues Alves
+- Vitor Moreira Ramos de Rezende
+
 # Projeto em produção
 https://bolao-brasileirao.vercel.app/
 
