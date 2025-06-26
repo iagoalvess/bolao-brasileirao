@@ -10,7 +10,7 @@ import pytest
 def load_site():
     options = Options()
     options.headless = True
-    #options.binary_location = "/snap/firefox/current/usr/lib/firefox/firefox"
+    options.binary_location = "/snap/firefox/current/usr/lib/firefox/firefox"
 
     try:
         driver = webdriver.Firefox(options=options)
