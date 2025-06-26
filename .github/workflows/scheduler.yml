@@ -38,7 +38,18 @@ jobs:
           tar -xzf geckodriver-v0.36.0-linux64.tar.gz
           chmod +x geckodriver
           sudo mv geckodriver /usr/local/bin/
-
+      - name: Check Firefox version and location
+        run: |
+          which firefox
+          firefox --version
+      - name: Check geckodriver version and location
+        run: |
+          which geckodriver
+          geckodriver --version
+      - name: Verify geckodriver permissions
+        run: ls -l /usr/local/bin/geckodriver
+      - name: Verify firefox
+        run: ls -l /snap/firefox/current/usr/lib/firefox/firefox
       - name: Run test of pytest
         env:
          DATABASE_USER: test
