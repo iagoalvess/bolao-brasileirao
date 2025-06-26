@@ -44,6 +44,11 @@ jobs:
           tar -xzf geckodriver-v0.36.0-linux64.tar.gz
           chmod +x geckodriver
           sudo mv geckodriver /usr/local/bin/
+      - name: Adjust PATH to prefer apt firefox
+        run: |
+          export PATH="/usr/bin:$PATH"
+          which firefox
+          firefox --version
       - name: Check Firefox version and location
         run: |
           which firefox

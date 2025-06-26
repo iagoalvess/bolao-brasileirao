@@ -4,15 +4,16 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.by import By
 import pytest
-
+from selenium.webdriver.firefox.service import Service
 
 @pytest.fixture
 def load_site():
     options = Options()
     options.headless = True
-    
-    driver = webdriver.Firefox(options=options)
-   
+    options.binary_location = "/usr/bin/firefox"  # força usar o Firefox do apt
+
+    service = Service("/usr/local/bin/geckodriver")  # caminho correto do geckodriver instalado
+    driver = webdriver.Firefox(service=service, options=options)
 
     try:
         driver.get("https://bolao-brasileirao.vercel.app/")
