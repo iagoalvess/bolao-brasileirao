@@ -35,7 +35,7 @@ jobs:
             sudo snap remove firefox || true
             sudo add-apt-repository -y ppa:mozillateam/ppa
             sudo apt-get update
-            sudo apt-get install -y firefox libdbus-glib-1-2 libgtk-3-0 libx11-xcb1 libxt6 libasound2
+            sudo apt-get install -y firefox libdbus-glib-1-2 libgtk-3-0 libx11-xcb1 libxt6 libasound2t64
             sudo apt-mark hold firefox
 
       - name: Install geckodriver
