@@ -10,14 +10,9 @@ import pytest
 def load_site():
     options = Options()
     options.headless = True
-    #options.binary_location = "/snap/firefox/current/usr/lib/firefox/firefox"
-
-    try:
-        driver = webdriver.Firefox(options=options)
-    except Exception:
-        options = Options()
-        options.headless = True
-        driver = webdriver.Firefox(options=options)
+    options.binary_location = "/snap/firefox/current/usr/lib/firefox/firefox"
+    driver = webdriver.Firefox(options=options)
+   
 
     try:
         driver.get("https://bolao-brasileirao.vercel.app/")
