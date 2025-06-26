@@ -53,3 +53,4 @@ tzlocal==5.3.1
 urllib3==2.4.0
 uvicorn==0.32.0
 wsproto==1.2.0
+webdriver-manager==4.0.2
