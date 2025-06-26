@@ -32,8 +32,8 @@ jobs:
           pip install -r ./backend/requirements.txt 
       - name: Install Firefox and dependencies
         run: |
-            sudo apt-get update
-            sudo apt-get install -y firefox libdbus-glib-1-2 libgtk-3-0 libx11-xcb1 libxt6 libasound2
+          sudo apt-get update
+          sudo apt-get install -y firefox libdbus-glib-1-2 libgtk-3-0 libx11-xcb1 libxt6 libasound2t64
 
       - name: Install geckodriver
         run: |
