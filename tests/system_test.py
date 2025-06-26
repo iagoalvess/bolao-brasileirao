@@ -10,6 +10,9 @@ import pytest
 def load_site():
     options = webdriver.FirefoxOptions()
     options.headless = True
+    options.add_argument("--headless")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
     options.binary_location = "/snap/firefox/current/usr/lib/firefox/firefox"
     driver = webdriver.Firefox(options=options)
    
