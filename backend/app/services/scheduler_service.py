@@ -12,7 +12,7 @@ def update_matches_job():
     print(f"Executando tarefa de atualização de partidas às {datetime.now()}")
     db: Session = SessionLocal()
     try:
-        MatchService.sync_all_matches_from_api(db=db)
+        MatchService.sync_all_matches_from_api(MatchService, db=db)
         print("Sincronização de partidas concluída com sucesso.")
     except Exception as e:
         print(f"Erro na tarefa de atualização: {str(e)}")
