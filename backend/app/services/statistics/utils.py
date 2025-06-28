@@ -1,8 +1,8 @@
-from ast import Match
 from typing import List
 from pytest import Session
 from sqlalchemy.orm import Session, joinedload
 from app.models.prediction import Prediction
+from app.models.match import Match
 
 
 def calculate_points(pred, match) -> int:
