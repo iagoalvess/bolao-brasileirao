@@ -11,9 +11,6 @@ O sistema desenvolvido tem como objetivo proporcionar uma plataforma interativa 
 O sistema foi desenvolvido em Python, utilizando FastAPI no backend, com SQLAlchemy para gerenciar o banco de dados e JWT para autenticação segura. As senhas são criptografadas com Passlib, e as variáveis sensíveis são tratadas com dotenv. O sistema consome dados da API da CBF para atualizar informações dos jogos e também realiza scraping de notícias do site UOL Esporte, garantindo que os usuários acompanhem as últimas novidades do futebol. Ademais, foi utilizado pytest e MagicMock do unittest para a realização dos testes, além de outras bibliotecas utilizadas para implementar o sistema.
 No frontend, foi utilizado React, Tailwind CSS e Axios, além de outras bibliotecas que garantem uma interface moderna e de fácil navegação. O resultado é uma plataforma segura, dinâmica e atualizada, que permite aos usuários fazer apostas, participar de rankings e acompanhar estatísticas e notícias esportivas.
 
-# Projeto em produção
-https://bolao-brasileirao.vercel.app/
-
 ## Projeto para desenvolvedor
 ```bash
 # Crie o virtualenv e ative
